@@ -107,12 +107,20 @@ namespace LearningDiary
             string printList = Console.ReadLine().ToLower();
             if (printList == "yes")
             {
-                for (int i = 0; i < topicList.Count; i++)
+                foreach (var topic in topicList)
                 {
-                    Console.WriteLine("Title: " + topicList[i].Title + " " + "Id: " + topicList[i].Id);
+                    Console.WriteLine("Title: " + topic.Title + " " + "Id: " + topic.Id);
                 }
             }
         }
+        //public static List<Topic> CreateTopics()
+        //{
+        //    List<Topic> topicList = new List<Topic>();
+        //    string topicProgressAnswer;
+        //    string taskAddAnswer;
+        //    string taskPrioAnswer;
+        //    string taskCompleteAnswer;
+        //}
     }
 
     public class Topic
