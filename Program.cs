@@ -69,9 +69,8 @@ namespace LearningDiary
                 while (taskAddAnswer == "yes")
                 {
                     Console.WriteLine("Give id to Task");
-                    topicList[topicList.Count - 1].Task1.Id = int.Parse(Console.ReadLine());
+                    topicList[topicList.Count - 1].TaskList[].Id = int.Parse(Console.ReadLine()); //JATKA TÄSTÄ
 
-                    //JATKA TÄSTÄ
                 }
 
                 Console.WriteLine("Do you want to input another topic?");
