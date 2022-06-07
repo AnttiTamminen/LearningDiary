@@ -8,16 +8,7 @@ namespace LearningDiary
         static void Main(string[] args)
         {
             List<Topic> topicList = new List<Topic>();
-            int id;
-            string title;
-            string description;
-            double estimatedTime;
-            double timeSpent;
-            string source;
-            DateTime startDate;
             string topicProgressAnswer;
-            bool inProgress;
-            DateTime completionDate;
             string taskAddAnswer;
             string taskPrioAnswer;
             string taskCompleteAnswer;
@@ -27,44 +18,43 @@ namespace LearningDiary
             string answerToStart = Console.ReadLine().ToLower();
             while (answerToStart == "yes")
             {
+                topicList.Add(new Topic());
+
                 Console.WriteLine("Give topic Id");
-                id = int.Parse(Console.ReadLine());
+                topicList[topicList.Count - 1].Id = int.Parse(Console.ReadLine());
 
                 Console.WriteLine("Give Title");
-                title = Console.ReadLine();
+                topicList[topicList.Count - 1].Title = Console.ReadLine();
 
                 Console.WriteLine("Give description");
-                description = Console.ReadLine();
+                topicList[topicList.Count - 1].Description = Console.ReadLine();
 
                 Console.WriteLine("Give estimated time to master");
-                estimatedTime = double.Parse(Console.ReadLine());
+                topicList[topicList.Count - 1].EstimatedTimeToMaster = double.Parse(Console.ReadLine());
 
                 Console.WriteLine("Give time spent");
-                timeSpent = double.Parse(Console.ReadLine());
+                topicList[topicList.Count - 1].TimeSpent = double.Parse(Console.ReadLine());
 
                 Console.WriteLine("Give source");
-                source = Console.ReadLine();
+                topicList[topicList.Count - 1].Source = Console.ReadLine();
 
                 Console.WriteLine("Give date of starting");
-                startDate = Convert.ToDateTime(Console.ReadLine());
+                topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(Console.ReadLine());
 
                 Console.WriteLine("Is topic in progress (yes/no)");
                 topicProgressAnswer = Console.ReadLine().ToLower();
                 if (topicProgressAnswer == "yes")
-                    inProgress = true;
+                    topicList[topicList.Count - 1].InProgress = true;
                 else
-                    inProgress = false;
+                    topicList[topicList.Count - 1].InProgress = false;
 
-                if (inProgress == false)
+                if (topicList[topicList.Count - 1].InProgress == false)
                 {
                     Console.WriteLine("Give completion date");
-                    completionDate = Convert.ToDateTime(Console.ReadLine());
+                    topicList[topicList.Count - 1].CompletionDate = Convert.ToDateTime(Console.ReadLine());
                 }
                 else
-                    completionDate = new DateTime(1, 1, 1);
-
-                topicList.Add(new Topic(id, title, description, estimatedTime, timeSpent, source, startDate, inProgress,
-                    completionDate));
+                    topicList[topicList.Count - 1].CompletionDate = new DateTime(1, 1, 1);
 
                 List<Task> taskList = new List<Task>();
                 Console.WriteLine("Do you want to add task to this topic? (yes/no)");
@@ -137,21 +127,6 @@ namespace LearningDiary
         public bool InProgress { get; set; }
         public DateTime CompletionDate { get; set; }
         public List<Task> TaskList { get; set; }
-
-        public Topic(int id, string title, string description, double estimatedTimeToMaster, 
-            double timeSpent, string source, DateTime startDate, bool inProgress, DateTime completionDate)
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-            EstimatedTimeToMaster = estimatedTimeToMaster;
-            TimeSpent = timeSpent;
-            Source = source;
-            StartLearningDate = startDate;
-            InProgress = inProgress;
-            CompletionDate = completionDate;
-        }
-
     }
 
     public class Task
