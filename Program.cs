@@ -64,14 +64,23 @@ namespace LearningDiary
                 topicList.Add(new Topic(id, title, description, estimatedTime, timeSpent, source, startDate, inProgress,
                     completionDate));
 
+                List<Task> taskList = new List<Task>();
                 Console.WriteLine("Do you want to add task to this topic? (yes/no)");
                 taskAddAnswer = Console.ReadLine().ToLower();
                 while (taskAddAnswer == "yes")
                 {
-                    Console.WriteLine("Give id to Task");
-                    topicList[topicList.Count - 1].TaskList[].Id = int.Parse(Console.ReadLine()); //JATKA TÄSTÄ
+                    taskList.Add(new Task());
 
+                    Console.WriteLine("Give id to Task");
+                    taskList[taskList.Count - 1].Id = int.Parse(Console.ReadLine());
+
+                    Console.WriteLine("Give Title to Task");
+                    taskList[taskList.Count - 1].Title = Console.ReadLine();
+
+                    Console.WriteLine("Give description to Task");
+                    taskList[taskList.Count - 1].Description = Console.ReadLine();
                 }
+                topicList[topicList.Count - 1].TaskList = taskList;
 
                 Console.WriteLine("Do you want to input another topic?");
                 answerToStart = Console.ReadLine().ToLower();
