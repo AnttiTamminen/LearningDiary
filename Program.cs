@@ -101,9 +101,7 @@ namespace LearningDiary
         public DateTime StartLearningDate { get; set; }
         public bool InProgress { get; set; }
         public DateTime CompletionDate { get; set; }
-        public Task Task1 { get; set; }
-        public Task Task2 { get; set; }
-        public Task Task3 { get; set; }
+        public List<Task> TaskList { get; set; }
 
         public Topic(int id, string title, string description, double estimatedTimeToMaster, 
             double timeSpent, string source, DateTime startDate, bool inProgress, DateTime completionDate)
