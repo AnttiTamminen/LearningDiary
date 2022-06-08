@@ -1,1 +1,7 @@
-Id: 123##Title: Topic1##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##TaskList: System.Collections.Generic.List`1[LearningDiary.Task]###Id: 987##Title: Topic2##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##TaskList: ###Id: 258##Title: Topic3##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##TaskList: ###
+Id: 135##Title: Topic1##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##Task Task1 ( 
+Id: 128##Title: Task1##Description: ##Notes: System.Collections.Generic.List`1[System.String]##Deadline: ##Priority: ##Done: False##
+) Task Task1##Task Task2 ( 
+Id: 186##Title: Task2##Description: ##Notes: System.Collections.Generic.List`1[System.String]##Deadline: ##Priority: ##Done: False##
+) Task Task2###Id: 183##Title: Topic2##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##Task Task111 ( 
+Id: 164##Title: Task111##Description: ##Notes: System.Collections.Generic.List`1[System.String]##Deadline: ##Priority: ##Done: False##
+) Task Task111###

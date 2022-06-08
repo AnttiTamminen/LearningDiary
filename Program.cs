@@ -50,14 +50,24 @@ namespace LearningDiary
                 foreach (var value in createdTopics[i].GetType().GetProperties())
                 {
                     if (value.Name == "TaskList")
-                    {
-                        //Tähän "Task" erikoistapaus jollain ilveellä
-                    }
+                        TasksToTxtfile(createdTopics[i], url);
                     else
-                        File.AppendAllText(url, string.Format("{0}: {1}##", value.Name, value.GetValue(createdTopics[i])));
+                        File.AppendAllText(url, string.Format($"{value.Name}: {value.GetValue(createdTopics[i])}##"));
                 }
-                
+
                 File.AppendAllText(url, "#");
+            }
+        }
+
+        public static void TasksToTxtfile(Topic oneTopic, string url) //KAATUU JOS YHTÄÄN TASKIA EI OLE SYÖTETTY
+        {
+            List<Task> listOfTasks = oneTopic.TaskList;  
+            for (int j = 0; j < listOfTasks.Count; j++)
+            {
+                File.AppendAllText(url, string.Format($"\nTask {listOfTasks[j].Title} ( \n"));
+                foreach (var item in listOfTasks[j].GetType().GetProperties())
+                    File.AppendAllText(url, string.Format($"{item.Name}: {item.GetValue(listOfTasks[j])}##"));
+                File.AppendAllText(url, string.Format($"\n) Task {listOfTasks[j].Title}##"));
             }
         }
 
