@@ -49,7 +49,12 @@ namespace LearningDiary
             {
                 foreach (var value in createdTopics[i].GetType().GetProperties())
                 {
-                    File.AppendAllText(url, string.Format("{0}: {1}##", value.Name, value.GetValue(createdTopics[i]))); // Tämä ei toimi taskeille!!!
+                    if (value.Name == "TaskList")
+                    {
+                        //Tähän "Task" erikoistapaus jollain ilveellä
+                    }
+                    else
+                        File.AppendAllText(url, string.Format("{0}: {1}##", value.Name, value.GetValue(createdTopics[i])));
                 }
                 
                 File.AppendAllText(url, "#");
@@ -91,7 +96,7 @@ namespace LearningDiary
                 Console.WriteLine("Give source");
                 topicList[topicList.Count - 1].Source = Console.ReadLine();
 
-                Console.WriteLine("Give date of starting");
+                Console.WriteLine("Give date of starting (YYYY, MM, DD");
                 startDate = Console.ReadLine();
                 if (!String.IsNullOrEmpty(startDate))
                     topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
@@ -106,7 +111,7 @@ namespace LearningDiary
 
                 if (topicList[topicList.Count - 1].InProgress == false)
                 {
-                    Console.WriteLine("Give completion date");
+                    Console.WriteLine("Give completion date (YYYY, MM, DD)");
                     completeDate = Console.ReadLine();
                     if (!String.IsNullOrEmpty(completeDate))
                         topicList[topicList.Count - 1].CompletionDate = Convert.ToDateTime(completeDate);
@@ -121,12 +126,14 @@ namespace LearningDiary
                
                 Console.WriteLine("Do you want to input another topic?");
                 answerToStart = Console.ReadLine().ToLower();
+                Console.Clear();
             }
             return topicList;
         }
 
         public static List<Task> CreateTasks(string taskAddAnswer)
         {
+            Console.Clear();
             List<Task> taskList = new List<Task>();
             string taskPrioAnswer;
             string taskCompleteAnswer;
@@ -145,7 +152,7 @@ namespace LearningDiary
                 Console.WriteLine("Give description to Task");
                 taskList[taskList.Count - 1].Description = Console.ReadLine();
 
-                Console.WriteLine("Give deadline to Task");
+                Console.WriteLine("Give deadline to Task (YYYY, MM, DD)");
                 taskDeadline = Console.ReadLine();
                 if (!String.IsNullOrEmpty(taskDeadline))
                     taskList[taskList.Count - 1].Deadline = Convert.ToDateTime(Console.ReadLine());
@@ -171,6 +178,7 @@ namespace LearningDiary
 
                 Console.WriteLine("Do you want to input another task to this topic? yes/no");
                 taskAddAnswer = Console.ReadLine().ToLower();
+                Console.Clear();
             }
             return taskList;
         }
