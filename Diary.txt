@@ -1,7 +1,8 @@
-Id: 546##Title: Aihe1##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##TaskList: ###Id: 667##Title: Aihe2##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##
+ID: 465##TITLE: Aihe1##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##
 *TASK* ( 
-Id: 454##Title: Tehtävä1##Description: ##Notes: System.Collections.Generic.List`1[System.String]##Deadline: ##Priority: ##Done: False##)##
+ID: 4766##TITLE: Lorem ipsum##DESCRIPTION: ##NOTES:##ipsum dolor sit amet. Quo natus consequatur sed eveniet magnam est 
+quos voluptas et velit quaerat sit quis exercitationem est voluptas 
+minima ut iure architecto. Sed cumque omnis quo enim omnis 
+et veniam accusantium vel obcaecati totam id accusamus ##DEADLINE: ##PRIORITY: ##DONE: False##)##
 *TASK* ( 
-Id: 4522##Title: Tehtävä2##Description: ##Notes: System.Collections.Generic.List`1[System.String]##Deadline: ##Priority: ##Done: False##)###Id: 433444##Title: Aihe3##Description: ##EstimatedTimeToMaster: ##TimeSpent: ##Source: ##StartLearningDate: ##InProgress: False##CompletionDate: ##
-*TASK* ( 
-Id: 42222##Title: Tehtävä xy##Description: ##Notes: System.Collections.Generic.List`1[System.String]##Deadline: ##Priority: ##Done: False##)###
+ID: 445##TITLE: Testailua##DESCRIPTION: ##NOTES:##Toimiko edellinen note? ##DEADLINE: ##PRIORITY: ##DONE: False##)###ID: 73733##TITLE: Testi aihe##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##TASKLIST: ###

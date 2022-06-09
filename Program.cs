@@ -29,17 +29,17 @@ namespace LearningDiary
         public static void PrintTopics(string url)
         {
             Console.Clear();
-            List<string> diaryContents = File.ReadAllText(url).Split("###").ToList();
+            List<string> diaryContents = File.ReadAllText(url).Split("###").ToList(); // ### used to recognize Topic end
             diaryContents.RemoveAt(diaryContents.Count - 1);
             List<string> printTextList = new List<string>();
             for (int i = 0; i < diaryContents.Count; i++)
             {
-                printTextList = diaryContents[i].Split("##").ToList();
+                printTextList = diaryContents[i].Split("##").ToList(); // ## used to recognize Topic properties end
                 for (int j = 0; j < printTextList.Count; j++)
                     Console.WriteLine(printTextList[j]);
 
                 Console.WriteLine();
-                Console.WriteLine("-----------------------------------------");
+                Console.WriteLine("---------------------------------------------------"); // --------- Used to divide Topics in console window
             }
         }
 
@@ -52,7 +52,7 @@ namespace LearningDiary
                     if (value.Name == "TaskList" && createdTopics[i].TaskList != null)
                         TasksToTxtfile(createdTopics[i], url);
                     else
-                        File.AppendAllText(url, string.Format($"{value.Name}: {value.GetValue(createdTopics[i])}##"));
+                        File.AppendAllText(url, string.Format($"{value.Name.ToUpper()}: {value.GetValue(createdTopics[i])}##"));
                 }
 
                 File.AppendAllText(url, "#");
@@ -66,9 +66,30 @@ namespace LearningDiary
             {
                 File.AppendAllText(url, string.Format($"\n*TASK* ( \n"));
                 foreach (var item in listOfTasks[j].GetType().GetProperties())
-                    File.AppendAllText(url, string.Format($"{item.Name}: {item.GetValue(listOfTasks[j])}##"));
-                File.AppendAllText(url, string.Format($")##"));
+                {
+                    if (item.Name == "Notes" && listOfTasks[j].Notes != null)
+                    {
+                        File.AppendAllText(url, string.Format($"{item.Name.ToUpper()}:##"));
+                        NotesToTxtfile(listOfTasks[j], url);
+                    }
+                    else
+                        File.AppendAllText(url, string.Format($"{item.Name.ToUpper()}: {item.GetValue(listOfTasks[j])}##"));
+                }
+                File.AppendAllText(url, ")##");
             }
+        }
+
+        public static void NotesToTxtfile(Task oneTask, string url)
+        {
+            for (int i = 0; i < oneTask.Notes.Count; i++)
+            {
+                File.AppendAllText(url, string.Format($"{oneTask.Notes[i]} "));
+                if (i % 10 == 0 && i != 0 && i != oneTask.Notes.Count - 1)
+                {
+                    File.AppendAllText(url, "\n");
+                }
+            }
+            File.AppendAllText(url, "##");
         }
 
             public static List<Topic> CreateTopics(string answerToStart)
@@ -110,7 +131,6 @@ namespace LearningDiary
                 startDate = Console.ReadLine();
                 if (!String.IsNullOrEmpty(startDate))
                     topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
-                
 
                 Console.WriteLine("Is topic in progress (yes/no)");
                 topicProgressAnswer = Console.ReadLine().ToLower();
