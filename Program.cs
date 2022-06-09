@@ -9,6 +9,9 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
+            //ADD functionality to take IDs for topics and tasks as running numbers (includes the ability to read last id from file when program starts to collect topics) 
+            //    for tasks this is easier because there is no need to read from file (maybe?)
+
             string url = @"C:\Visual Studio\Projects\LearningDiary\Diary.txt";
 
             Console.WriteLine("Do you want to input a topic? (yes/no)");
@@ -92,12 +95,12 @@ namespace LearningDiary
             File.AppendAllText(url, "##");
         }
 
-            public static List<Topic> CreateTopics(string answerToStart)
+        public static List<Topic> CreateTopics(string answerToStart)
         {
             List<Topic> topicList = new List<Topic>();
             string topicProgressAnswer;
             string estimatedTimeAnswer;
-            string timeSpentAnswer;
+            //string timeSpentAnswer;
             string startDate;
             string completeDate;
 
@@ -119,15 +122,10 @@ namespace LearningDiary
                 if (!String.IsNullOrEmpty(estimatedTimeAnswer))
                     topicList[topicList.Count - 1].EstimatedTimeToMaster = double.Parse(estimatedTimeAnswer);
 
-                Console.WriteLine("Give time spent");
-                timeSpentAnswer = Console.ReadLine();
-                if (!String.IsNullOrEmpty(timeSpentAnswer))
-                    topicList[topicList.Count - 1].TimeSpent = double.Parse(timeSpentAnswer);
-
                 Console.WriteLine("Give source");
                 topicList[topicList.Count - 1].Source = Console.ReadLine();
 
-                Console.WriteLine("Give date of starting (YYYY, MM, DD)");
+                Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM:SS)");
                 startDate = Console.ReadLine();
                 if (!String.IsNullOrEmpty(startDate))
                     topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
@@ -141,12 +139,18 @@ namespace LearningDiary
 
                 if (topicList[topicList.Count - 1].InProgress == false)
                 {
-                    Console.WriteLine("Give completion date (YYYY, MM, DD)");
+                    Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM:SS)");
                     completeDate = Console.ReadLine();
                     if (!String.IsNullOrEmpty(completeDate))
                         topicList[topicList.Count - 1].CompletionDate = Convert.ToDateTime(completeDate);
                 }
-                
+
+                if (topicList[topicList.Count - 1].CompletionDate != null &&
+                    topicList[topicList.Count - 1].StartLearningDate != null)
+                {
+                    topicList[topicList.Count - 1].TimeSpent = ((TimeSpan)(topicList[topicList.Count - 1].CompletionDate - topicList[topicList.Count - 1].StartLearningDate)).TotalHours;
+                }
+
                 Console.WriteLine("Do you want to add task to this topic? (yes/no)");
                 string taskAddAnswer = Console.ReadLine().ToLower();
                 if (taskAddAnswer == "yes")
@@ -182,7 +186,7 @@ namespace LearningDiary
                 Console.WriteLine("Give description to Task");
                 taskList[taskList.Count - 1].Description = Console.ReadLine();
 
-                Console.WriteLine("Give deadline to Task (YYYY, MM, DD)");
+                Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM:SS)");
                 taskDeadline = Console.ReadLine();
                 if (!String.IsNullOrEmpty(taskDeadline))
                     taskList[taskList.Count - 1].Deadline = Convert.ToDateTime(Console.ReadLine());
