@@ -39,7 +39,7 @@ namespace LearningDiary
                     Console.WriteLine(printTextList[j]);
 
                 Console.WriteLine();
-                Console.WriteLine("-------------------------------");
+                Console.WriteLine("-----------------------------------------");
             }
         }
 
@@ -47,9 +47,9 @@ namespace LearningDiary
         {
             for (int i = 0; i < createdTopics.Count; i++)
             {
-                foreach (var value in createdTopics[i].GetType().GetProperties())
+                foreach (var value in createdTopics[i].GetType().GetProperties()) 
                 {
-                    if (value.Name == "TaskList")
+                    if (value.Name == "TaskList" && createdTopics[i].TaskList != null)
                         TasksToTxtfile(createdTopics[i], url);
                     else
                         File.AppendAllText(url, string.Format($"{value.Name}: {value.GetValue(createdTopics[i])}##"));
@@ -59,15 +59,15 @@ namespace LearningDiary
             }
         }
 
-        public static void TasksToTxtfile(Topic oneTopic, string url) //KAATUU JOS YHTÄÄN TASKIA EI OLE SYÖTETTY
+        public static void TasksToTxtfile(Topic oneTopic, string url) 
         {
             List<Task> listOfTasks = oneTopic.TaskList;  
             for (int j = 0; j < listOfTasks.Count; j++)
             {
-                File.AppendAllText(url, string.Format($"\nTask {listOfTasks[j].Title} ( \n"));
+                File.AppendAllText(url, string.Format($"\n*TASK* ( \n"));
                 foreach (var item in listOfTasks[j].GetType().GetProperties())
                     File.AppendAllText(url, string.Format($"{item.Name}: {item.GetValue(listOfTasks[j])}##"));
-                File.AppendAllText(url, string.Format($"\n) Task {listOfTasks[j].Title}##"));
+                File.AppendAllText(url, string.Format($")##"));
             }
         }
 
@@ -106,7 +106,7 @@ namespace LearningDiary
                 Console.WriteLine("Give source");
                 topicList[topicList.Count - 1].Source = Console.ReadLine();
 
-                Console.WriteLine("Give date of starting (YYYY, MM, DD");
+                Console.WriteLine("Give date of starting (YYYY, MM, DD)");
                 startDate = Console.ReadLine();
                 if (!String.IsNullOrEmpty(startDate))
                     topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
@@ -134,7 +134,7 @@ namespace LearningDiary
                     topicList[topicList.Count - 1].TaskList = CreateTasks(taskAddAnswer);
                 }
                
-                Console.WriteLine("Do you want to input another topic?");
+                Console.WriteLine("Do you want to input another topic? (yes/no)");
                 answerToStart = Console.ReadLine().ToLower();
                 Console.Clear();
             }
