@@ -11,6 +11,8 @@ namespace LearningDiary
         {
             string url = @"C:\Visual Studio\Projects\LearningDiary\Diary.txt";
 
+            Welcome();
+
             Console.WriteLine("Do you want to input a topic? (yes/no)");
             string answerToStart = Console.ReadLine().ToLower();
             if (answerToStart == "yes")
@@ -24,11 +26,18 @@ namespace LearningDiary
             string printList = Console.ReadLine().ToLower();
             if (printList == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
                 PrintTopics(url);
-            else
+            else if (printList == "yes")
             {
                 Console.Clear();
-                Console.WriteLine("No topics created yet. Restart program to give topic entry");
+                Console.WriteLine("No topics created yet. Restart program to give first topic entry!");
             }
+        }
+
+        public static void Welcome()
+        {
+            Console.WriteLine("*********************************************************************\n\nWelcome to Learning diary console app!" +
+                              "\n\nAnswer questions as stated.\nYou can always just press enter to skip question or answer no." +
+                              "\n\n*********************************************************************\n");
         }
 
         public static void PrintTopics(string url)
