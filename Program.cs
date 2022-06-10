@@ -27,7 +27,7 @@ namespace LearningDiary
             else
             {
                 Console.Clear();
-                Console.WriteLine("No topics created yet");
+                Console.WriteLine("No topics created yet. Restart program to give topic entry");
             }
         }
 
@@ -117,32 +117,62 @@ namespace LearningDiary
             string estimatedTimeAnswer;
             string startDate;
             string completeDate;
+            bool tryAgain = true;
 
             while (answerToStart == "yes")
             {
                 topicList.Add(new Topic());
 
+                // Adding Id
                 topicList[topicList.Count - 1].Id = nextId;
 
+                // Adding title
                 Console.WriteLine("Give Title");
                 topicList[topicList.Count - 1].Title = Console.ReadLine();
 
+                // Addin description
                 Console.WriteLine("Give description");
                 topicList[topicList.Count - 1].Description = Console.ReadLine();
 
-                Console.WriteLine("Give estimated time to master");
-                estimatedTimeAnswer = Console.ReadLine();
-                if (!String.IsNullOrEmpty(estimatedTimeAnswer))
-                    topicList[topicList.Count - 1].EstimatedTimeToMaster = double.Parse(estimatedTimeAnswer);
+                // Adding time to master
+                Console.WriteLine("Give estimated time to master in hours");
+                do
+                {
+                    try
+                    {
+                        estimatedTimeAnswer = Console.ReadLine();
+                        if (!String.IsNullOrEmpty(estimatedTimeAnswer))
+                            topicList[topicList.Count - 1].EstimatedTimeToMaster = double.Parse(estimatedTimeAnswer);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive estimated time tom master in hours and use \",\" as decimal mark");
+                    }
+                } while (tryAgain);
 
+                // Adding source
                 Console.WriteLine("Give source");
                 topicList[topicList.Count - 1].Source = Console.ReadLine();
 
-                Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM:SS)");
-                startDate = Console.ReadLine();
-                if (!String.IsNullOrEmpty(startDate))
-                    topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
+                // Adding start date
+                Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM)");
+                do
+                {
+                    try
+                    {
+                        startDate = Console.ReadLine();
+                        if (!String.IsNullOrEmpty(startDate))
+                            topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive start date in format (YYYY, MM, DD, HH:MM)");
+                    }
+                } while (tryAgain);
 
+                // Adding progress status
                 Console.WriteLine("Is topic in progress (yes/no)");
                 topicProgressAnswer = Console.ReadLine().ToLower();
                 if (topicProgressAnswer == "yes")
@@ -150,20 +180,35 @@ namespace LearningDiary
                 else 
                     topicList[topicList.Count - 1].InProgress = false;
 
+                // Adding completion date
                 if (topicList[topicList.Count - 1].InProgress == false)
                 {
-                    Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM:SS)");
-                    completeDate = Console.ReadLine();
-                    if (!String.IsNullOrEmpty(completeDate))
-                        topicList[topicList.Count - 1].CompletionDate = Convert.ToDateTime(completeDate);
+                    Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM)");
+                    do
+                    {
+                        try
+                        {
+                            completeDate = Console.ReadLine();
+                            if (!String.IsNullOrEmpty(completeDate))
+                                topicList[topicList.Count - 1].CompletionDate = Convert.ToDateTime(completeDate);
+                            break;
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Input seems to be incorrect format.\nGive completion date in format (YYYY, MM, DD, HH:MM)");
+                        }
+                    } while (tryAgain);
+
                 }
 
+                // Adding time spent
                 if (topicList[topicList.Count - 1].CompletionDate != null &&
                     topicList[topicList.Count - 1].StartLearningDate != null)
                 {
                     topicList[topicList.Count - 1].TimeSpent = ((TimeSpan)(topicList[topicList.Count - 1].CompletionDate - topicList[topicList.Count - 1].StartLearningDate)).TotalHours;
                 }
 
+                // Adding tasks
                 Console.WriteLine("Do you want to add task to this topic? (yes/no)");
                 string taskAddAnswer = Console.ReadLine().ToLower();
                 if (taskAddAnswer == "yes")
@@ -189,26 +234,48 @@ namespace LearningDiary
             string taskDeadline;
 
             int nextTaskId = 0;
+            bool tryAgain = true;
 
             while (taskAddAnswer == "yes")
             {
                 taskList.Add(new Task());
 
+                // Adding Id
                 taskList[taskList.Count - 1].Id = nextTaskId;
 
+                // Adding title
                 Console.WriteLine("Give Title to Task");
                 taskList[taskList.Count - 1].Title = Console.ReadLine();
 
+                // Adding description
                 Console.WriteLine("Give description to Task");
                 taskList[taskList.Count - 1].Description = Console.ReadLine();
 
-                Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM:SS)");
-                taskDeadline = Console.ReadLine();
-                if (!String.IsNullOrEmpty(taskDeadline))
-                    taskList[taskList.Count - 1].Deadline = Convert.ToDateTime(Console.ReadLine());
+                // Adding deadline
+                Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM)");
+                do
+                {
+                    try
+                    {
+                        taskDeadline = Console.ReadLine();
+                        if (!String.IsNullOrEmpty(taskDeadline))
+                            taskList[taskList.Count - 1].Deadline = Convert.ToDateTime(Console.ReadLine());
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive deadline date in format (YYYY, MM, DD, HH:MM)");
+                    }
+                } while (tryAgain);
 
+                // Adding priority
                 Console.WriteLine("Give priority to Task (Low/Medium/High)");
                 taskPrioAnswer = Console.ReadLine();
+                while (taskPrioAnswer != "Low" && taskPrioAnswer != "Medium" && taskPrioAnswer != "High" && !String.IsNullOrEmpty(taskPrioAnswer))
+                {
+                    Console.WriteLine("Input seems to be incorrect format.\nGive priority to Task as one of these: (Low/Medium/High), notice upper and lower cases");
+                    taskPrioAnswer = Console.ReadLine();
+                }
                 if (taskPrioAnswer == "High")
                     taskList[taskList.Count - 1].Priority = Task.EnumPriority.High;
                 else if (taskPrioAnswer == "Medium")
@@ -216,9 +283,11 @@ namespace LearningDiary
                 else if (taskPrioAnswer == "Low")
                     taskList[taskList.Count - 1].Priority = Task.EnumPriority.Low;
 
+                // Adding notes
                 Console.WriteLine("Add note text to task");
                 taskList[taskList.Count - 1].Notes = new List<string>(Console.ReadLine().Split(' '));
 
+                // Adding complete status
                 Console.WriteLine("Is task complete (yes/no)");
                 taskCompleteAnswer = Console.ReadLine();
                 if (taskCompleteAnswer.ToLower() == "yes")
