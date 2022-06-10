@@ -1,8 +1,11 @@
-ID: 465##TITLE: Aihe1##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##
+ID: 0##TITLE: Aihe1##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: 69,5##SOURCE: ##STARTLEARNINGDATE: 05/06/2022 15.00.00##INPROGRESS: False##COMPLETIONDATE: 08/06/2022 12.30.00##
 *TASK* ( 
-ID: 4766##TITLE: Lorem ipsum##DESCRIPTION: ##NOTES:##ipsum dolor sit amet. Quo natus consequatur sed eveniet magnam est 
-quos voluptas et velit quaerat sit quis exercitationem est voluptas 
-minima ut iure architecto. Sed cumque omnis quo enim omnis 
-et veniam accusantium vel obcaecati totam id accusamus ##DEADLINE: ##PRIORITY: ##DONE: False##)##
+ID: 0##TITLE: Tehtävä1##DESCRIPTION: ##NOTES:##ipsum dolor sit amet. Sit sapiente odit sed quos alias non 
+quos eligendi sed sint repellendus aut molestiae saepe sed quibusdam 
+omnis. Sit dolores natus ad quis ullam est perspiciatis modi 
+ut cupiditate totam. Et unde neque non voluptas consectetur et 
+iusto necessitatibus ea distinctio quis distinctio magnam ut modi ##DEADLINE: ##PRIORITY: ##DONE: False##)##
 *TASK* ( 
-ID: 445##TITLE: Testailua##DESCRIPTION: ##NOTES:##Toimiko edellinen note? ##DEADLINE: ##PRIORITY: ##DONE: False##)###ID: 73733##TITLE: Testi aihe##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##TASKLIST: ###ID: 4652##TITLE: Testing TimeSpent##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: 24##SOURCE: ##STARTLEARNINGDATE: 01/06/2022 0.00.00##INPROGRESS: False##COMPLETIONDATE: 02/06/2022 0.00.00##TASKLIST: ###ID: 465##TITLE: Testailua taas##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: 50,915277777777774##SOURCE: ##STARTLEARNINGDATE: 01/01/2022 12.05.05##INPROGRESS: False##COMPLETIONDATE: 03/01/2022 15.00.00##TASKLIST: ###
+ID: 1##TITLE: Tehtävä2##DESCRIPTION: ##NOTES:## ##DEADLINE: ##PRIORITY: ##DONE: False##)###ID: 1##TITLE: Aihe2##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##
+*TASK* ( 
+ID: 0##TITLE: Tehtävä11##DESCRIPTION: ##NOTES:##Testailua toimiiko tämä notes kenttä ##DEADLINE: ##PRIORITY: ##DONE: False##)###ID: 2##TITLE: Aihe3##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##TASKLIST: ###ID: 3##TITLE: Aihe4##DESCRIPTION: Testaan toimiiko juokseva id kun ohjelman avaa uudestaan##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##TASKLIST: ###ID: 4##TITLE: Testailu jatkuu##DESCRIPTION: ##ESTIMATEDTIMETOMASTER: ##TIMESPENT: ##SOURCE: ##STARTLEARNINGDATE: ##INPROGRESS: False##COMPLETIONDATE: ##TASKLIST: ###

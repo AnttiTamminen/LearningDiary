@@ -9,24 +9,26 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
-            //ADD functionality to take IDs for topics and tasks as running numbers (includes the ability to read last id from file when program starts to collect topics) 
-            //    for tasks this is easier because there is no need to read from file (maybe?)
-
             string url = @"C:\Visual Studio\Projects\LearningDiary\Diary.txt";
 
             Console.WriteLine("Do you want to input a topic? (yes/no)");
             string answerToStart = Console.ReadLine().ToLower();
             if (answerToStart == "yes")
             {
-                List<Topic> createdTopics = CreateTopics(answerToStart);
+                List<Topic> createdTopics = CreateTopics(answerToStart, url);
 
                 TopicsToTxtfile(createdTopics, url);
             }
 
             Console.WriteLine("Do you want to see list of all topics? (yes/no)");
             string printList = Console.ReadLine().ToLower();
-            if (printList == "yes")
+            if (printList == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
                 PrintTopics(url);
+            else
+            {
+                Console.Clear();
+                Console.WriteLine("No topics created yet");
+            }
         }
 
         public static void PrintTopics(string url)
@@ -42,7 +44,7 @@ namespace LearningDiary
                     Console.WriteLine(printTextList[j]);
 
                 Console.WriteLine();
-                Console.WriteLine("---------------------------------------------------"); // --------- Used to divide Topics in console window
+                Console.WriteLine("--------------------------------------------------------------"); // --------- Used to divide Topics in console window
             }
         }
 
@@ -95,12 +97,24 @@ namespace LearningDiary
             File.AppendAllText(url, "##");
         }
 
-        public static List<Topic> CreateTopics(string answerToStart)
+        public static List<Topic> CreateTopics(string answerToStart, string url)
         {
+            //Hakee viimeisen Topic idn tiedostosta
+            int nextId;
+
+            if (File.Exists(url) && new FileInfo(url).Length != 0)
+            {
+                string[] fielTextAsArray = File.ReadAllText(url).Split("###");
+                string lastTopicStr = fielTextAsArray[fielTextAsArray.Length - 2];
+                int idHeaderLength = 4; // maaginen 4 tulee koska "ID: " on neljä merkkiä
+                nextId = Convert.ToInt32(lastTopicStr.Substring(idHeaderLength, lastTopicStr.IndexOf('#') - idHeaderLength)) + 1;
+            }
+            else
+                nextId = 0;
+ 
             List<Topic> topicList = new List<Topic>();
             string topicProgressAnswer;
             string estimatedTimeAnswer;
-            //string timeSpentAnswer;
             string startDate;
             string completeDate;
 
@@ -108,8 +122,7 @@ namespace LearningDiary
             {
                 topicList.Add(new Topic());
 
-                Console.WriteLine("Give topic Id");
-                topicList[topicList.Count - 1].Id = int.Parse(Console.ReadLine());
+                topicList[topicList.Count - 1].Id = nextId;
 
                 Console.WriteLine("Give Title");
                 topicList[topicList.Count - 1].Title = Console.ReadLine();
@@ -157,10 +170,12 @@ namespace LearningDiary
                 {
                     topicList[topicList.Count - 1].TaskList = CreateTasks(taskAddAnswer);
                 }
-               
+
                 Console.WriteLine("Do you want to input another topic? (yes/no)");
                 answerToStart = Console.ReadLine().ToLower();
                 Console.Clear();
+
+                nextId += 1;
             }
             return topicList;
         }
@@ -173,12 +188,13 @@ namespace LearningDiary
             string taskCompleteAnswer;
             string taskDeadline;
 
+            int nextTaskId = 0;
+
             while (taskAddAnswer == "yes")
             {
                 taskList.Add(new Task());
 
-                Console.WriteLine("Give id to Task");
-                taskList[taskList.Count - 1].Id = int.Parse(Console.ReadLine());
+                taskList[taskList.Count - 1].Id = nextTaskId;
 
                 Console.WriteLine("Give Title to Task");
                 taskList[taskList.Count - 1].Title = Console.ReadLine();
@@ -213,6 +229,8 @@ namespace LearningDiary
                 Console.WriteLine("Do you want to input another task to this topic? yes/no");
                 taskAddAnswer = Console.ReadLine().ToLower();
                 Console.Clear();
+
+                nextTaskId += 1;
             }
             return taskList;
         }
