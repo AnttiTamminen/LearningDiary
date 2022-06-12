@@ -108,9 +108,9 @@ namespace LearningDiary
 
         public static List<Topic> CreateTopics(string answerToStart, string url)
         {
-            //Hakee viimeisen Topic idn tiedostosta
             int nextId;
 
+            //Hakee viimeisen Topic idn tiedostosta
             if (File.Exists(url) && new FileInfo(url).Length != 0)
             {
                 string[] fielTextAsArray = File.ReadAllText(url).Split("###");
@@ -145,7 +145,7 @@ namespace LearningDiary
 
                 // Adding time to master
                 Console.WriteLine("Give estimated time to master in hours");
-                do
+                while (tryAgain)
                 {
                     try
                     {
@@ -158,7 +158,7 @@ namespace LearningDiary
                     {
                         Console.WriteLine("Input seems to be incorrect format.\nGive estimated time tom master in hours and use \",\" as decimal mark");
                     }
-                } while (tryAgain);
+                }
 
                 // Adding source
                 Console.WriteLine("Give source");
@@ -166,7 +166,7 @@ namespace LearningDiary
 
                 // Adding start date
                 Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM)");
-                do
+                while (tryAgain)
                 {
                     try
                     {
@@ -179,7 +179,7 @@ namespace LearningDiary
                     {
                         Console.WriteLine("Input seems to be incorrect format.\nGive start date in format (YYYY, MM, DD, HH:MM)");
                     }
-                } while (tryAgain);
+                }
 
                 // Adding progress status
                 Console.WriteLine("Is topic in progress (yes/no)");
@@ -193,7 +193,7 @@ namespace LearningDiary
                 if (topicList[topicList.Count - 1].InProgress == false)
                 {
                     Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM)");
-                    do
+                    while (tryAgain)
                     {
                         try
                         {
@@ -206,8 +206,7 @@ namespace LearningDiary
                         {
                             Console.WriteLine("Input seems to be incorrect format.\nGive completion date in format (YYYY, MM, DD, HH:MM)");
                         }
-                    } while (tryAgain);
-
+                    }
                 }
 
                 // Adding time spent
@@ -262,7 +261,7 @@ namespace LearningDiary
 
                 // Adding deadline
                 Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM)");
-                do
+                while (tryAgain)
                 {
                     try
                     {
@@ -275,7 +274,7 @@ namespace LearningDiary
                     {
                         Console.WriteLine("Input seems to be incorrect format.\nGive deadline date in format (YYYY, MM, DD, HH:MM)");
                     }
-                } while (tryAgain);
+                } 
 
                 // Adding priority
                 Console.WriteLine("Give priority to Task (Low/Medium/High)");
