@@ -23,14 +23,147 @@ namespace LearningDiary
             }
 
             Console.WriteLine("Do you want to see list of all topics? (yes/no)");
-            string printList = Console.ReadLine().ToLower();
-            if (printList == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
+            answerToStart = Console.ReadLine().ToLower();
+            if (answerToStart == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
                 PrintTopics(url);
-            else if (printList == "yes")
+            else if (answerToStart == "yes")
             {
                 Console.Clear();
                 Console.WriteLine("No topics created yet. Restart program to give first topic entry!");
             }
+
+            Console.WriteLine("Find a topic by its title? (yes/no)");
+            answerToStart = Console.ReadLine().ToLower();
+            if (answerToStart == "yes")
+            {
+                Console.WriteLine("Give title to search.");
+                string searchTitle = Console.ReadLine();
+                FindTopicByTitle(url, searchTitle);
+            }
+
+
+        }
+
+        public static List<Topic> FileTxtToTopiclist(string url)
+        {
+            string[] fileTextArray = File.ReadAllText(url).Split("###");
+            fileTextArray = fileTextArray.Take(fileTextArray.Length - 1).ToArray(); //removes last empty element from array (I need to change the file structure at some point
+            List<Topic> topicList = new List<Topic>();
+            int headingLength;
+            for (int i = 0; i < fileTextArray.Length; i++)
+            {
+                string[] topicFieldsArray = fileTextArray[i].Split("##");
+                topicList.Add(new Topic());
+
+                headingLength = 4;
+                topicList[i].Id = Convert.ToInt32(topicFieldsArray[0].Substring(headingLength,
+                    topicFieldsArray[0].Length - headingLength));
+
+                headingLength = 7;
+                topicList[i].Title = topicFieldsArray[1].Substring(headingLength,
+                    topicFieldsArray[1].Length - headingLength);
+
+                headingLength = 13;
+                topicList[i].Description = topicFieldsArray[2].Substring(headingLength,
+                    topicFieldsArray[2].Length - headingLength);
+
+                headingLength = 23;
+                topicList[i].EstimatedTimeToMaster = Convert.ToDouble(topicFieldsArray[3].Substring(headingLength,
+                    topicFieldsArray[3].Length - headingLength));
+
+                headingLength = 11;
+                topicList[i].TimeSpent = Convert.ToDouble(topicFieldsArray[4].Substring(headingLength,
+                    topicFieldsArray[4].Length - headingLength));
+
+                headingLength = 8;
+                topicList[i].Source = topicFieldsArray[5].Substring(headingLength,
+                    topicFieldsArray[5].Length - headingLength);
+
+                headingLength = 19;
+                topicList[i].StartLearningDate = Convert.ToDateTime(topicFieldsArray[6].Substring(headingLength,
+                    topicFieldsArray[6].Length - headingLength));
+
+                headingLength = 12;
+                topicList[i].InProgress = Convert.ToBoolean(topicFieldsArray[7].Substring(headingLength,
+                    topicFieldsArray[7].Length - headingLength));
+
+                headingLength = 16;
+                topicList[i].CompletionDate = Convert.ToDateTime(topicFieldsArray[8].Substring(headingLength,
+                    topicFieldsArray[8].Length - headingLength));
+
+                if (topicFieldsArray[9].Contains("*TASK*"))
+                    topicList[i].TaskList = FileTxtToTasklist(topicFieldsArray[9]);
+            }
+            return topicList;
+        }
+
+        public static List<Task> FileTxtToTasklist(string tasksFromFile)
+        {
+            List<Task> taskList = new List<Task>();
+            string[] taskArray = tasksFromFile.Split("*TASK* ("); // first element is null maybe?
+            int headingLength;
+            for (int i = 1; i < taskArray.Length; i++)
+            {
+                taskList.Add(new Task());
+                string[] taskFieldsArray = taskArray[i].Split("##");
+
+                headingLength = 4;
+                taskList[i - 1].Id = Convert.ToInt32(taskFieldsArray[0].Substring(headingLength,
+                    taskFieldsArray[0].Length - headingLength));
+
+                headingLength = 7;
+                taskList[i - 1].Title = taskFieldsArray[1].Substring(headingLength,
+                    taskFieldsArray[1].Length - headingLength);
+
+                headingLength = 13;
+                taskList[i - 1].Description = taskFieldsArray[2].Substring(headingLength,
+                    taskFieldsArray[2].Length - headingLength);
+
+                headingLength = 6;
+                taskList[i - 1].Notes = new List<string>(taskFieldsArray[3].Substring(headingLength,
+                    taskFieldsArray[3].Length - headingLength).Trim().Split(' '));
+
+                headingLength = 10;
+                taskList[i - 1].Deadline = Convert.ToDateTime(taskFieldsArray[4].Substring(headingLength,
+                    taskFieldsArray[4].Length - headingLength));
+
+                headingLength = 10;
+                string taskPriority = taskFieldsArray[5].Substring(headingLength,
+                    taskFieldsArray[5].Length - headingLength);
+                if (taskPriority == "Low")
+                    taskList[i - 1].Priority = Task.EnumPriority.Low;
+                else if (taskPriority == "Medium")
+                    taskList[i - 1].Priority = Task.EnumPriority.Medium;
+                else if (taskPriority == "High")
+                    taskList[i - 1].Priority = Task.EnumPriority.High;
+
+                headingLength = 6;
+                taskList[i - 1].Done = Convert.ToBoolean(taskFieldsArray[6].Substring(headingLength,
+                    taskFieldsArray[6].Length - headingLength));
+            }
+            return taskList;
+        }
+
+        public static void FindTopicByTitle(string url, string searchTitle)
+        {
+            List <Topic> topicList = FileTxtToTopiclist(url);
+
+            //if (File.Exists(url) && new FileInfo(url).Length != 0)
+            //{
+
+            //    // Creating Dictionary of Topics by title
+            //    Dictionary<string, string[]> topicDictionary = new Dictionary<string, string[]>();
+            //    string[] fileTextAsArray = File.ReadAllText(url).Split("###");
+            //    int titleHeadingLenght = 5;
+            //    for (int i = 0; i < fileTextAsArray.Length - 1; i++)
+            //    {
+            //        string[] topicFieldsArray = fileTextAsArray[i].Split("##");
+            //        string titleKey = topicFieldsArray[1].Substring(titleHeadingLenght, topicFieldsArray[1].Length - titleHeadingLenght + 1);
+            //        if (titleKey != " ")
+            //            topicDictionary.Add(titleKey, topicFieldsArray);
+            //    }
+
+            //}
         }
 
         public static void Welcome()
@@ -83,13 +216,13 @@ namespace LearningDiary
                 {
                     if (item.Name == "Notes" && listOfTasks[j].Notes != null)
                     {
-                        File.AppendAllText(url, string.Format($"{item.Name.ToUpper()}:##"));
+                        File.AppendAllText(url, string.Format($"{item.Name.ToUpper()}:\n"));
                         NotesToTxtfile(listOfTasks[j], url);
                     }
                     else
                         File.AppendAllText(url, string.Format($"{item.Name.ToUpper()}: {item.GetValue(listOfTasks[j])}##"));
                 }
-                File.AppendAllText(url, ")##");
+                File.AppendAllText(url, ")\n");
             }
         }
 
@@ -110,11 +243,11 @@ namespace LearningDiary
         {
             int nextId;
 
-            //Hakee viimeisen Topic idn tiedostosta
+            //Hakee viimeisen Topic Idn tiedostosta
             if (File.Exists(url) && new FileInfo(url).Length != 0)
             {
-                string[] fielTextAsArray = File.ReadAllText(url).Split("###");
-                string lastTopicStr = fielTextAsArray[fielTextAsArray.Length - 2];
+                string[] fileTextAsArray = File.ReadAllText(url).Split("###");
+                string lastTopicStr = fileTextAsArray[fileTextAsArray.Length - 2];
                 int idHeaderLength = 4; // maaginen 4 tulee koska "ID: " on neljä merkkiä
                 nextId = Convert.ToInt32(lastTopicStr.Substring(idHeaderLength, lastTopicStr.IndexOf('#') - idHeaderLength)) + 1;
             }
