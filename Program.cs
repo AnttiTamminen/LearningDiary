@@ -28,7 +28,7 @@ namespace LearningDiary
             {
                 PrintTopics(url);
 
-                FindSpecificTopic(url);
+                FindModifyTopic(url);
             }
             else if (answerToStart == "yes")
             {
@@ -37,9 +37,10 @@ namespace LearningDiary
             }
         }
 
-        public static void FindSpecificTopic(string url)
+        public static void FindModifyTopic(string url)
         {
             string answerToStart;
+            Topic wantedTopic = new Topic();
             Console.WriteLine("\nFind a specific topic? (yes/no)");
             answerToStart = Console.ReadLine().ToLower();
             while (answerToStart == "yes")
@@ -52,13 +53,48 @@ namespace LearningDiary
                     answer12 = Console.ReadLine();
                 }
                 if (answer12 == "1")
-                    FindTopicByTitle(url);
+                    wantedTopic = FindTopicByTitle(url);
                 else if (answer12 == "2")
                     FindTopicById(url);
+
+                Console.WriteLine("Do you want to modify/remove this topic?");
+                answerToStart = Console.ReadLine().ToLower();
+                if (answerToStart == "yes")
+                {
+                    Console.WriteLine("Type 1 to modify topic or 2 to remove it");
+                    answer12 = Console.ReadLine();
+                    while (answer12 != "1" && answer12 != "2")
+                    {
+                        Console.WriteLine("Try again.\nType 1 to modify topic, or 2 to remove it");
+                        answer12 = Console.ReadLine();
+                    }
+                    if (answer12 == "1")
+                       ModifyTopic(url, wantedTopic); 
+                    else if (answer12 == "2"){}
+                       RemoveTopic(url, wantedTopic); 
+                }
 
                 Console.WriteLine("\nFind another specific topic? (yes/no)");
                 answerToStart = Console.ReadLine().ToLower();
             }
+        }
+
+        public static void ModifyTopic(string url, Topic topicToModify)
+        {
+            List<Topic> oldTopicList = FileTxtToTopiclist(url);
+            int index = oldTopicList.IndexOf(topicToModify);
+            oldTopicList[index] = topicToModify;
+            File.Delete(url);
+            TopicsToTxtfile(oldTopicList, url);
+        }
+
+        public static void RemoveTopic(string url, Topic topicToRemove)
+        {
+            List<Topic> oldTopicList = FileTxtToTopiclist(url);
+            int index = oldTopicList.IndexOf(topicToRemove);
+            oldTopicList.RemoveAt(index);
+            File.Delete(url);
+            TopicsToTxtfile(oldTopicList, url);
         }
 
         public static void Welcome()
@@ -68,7 +104,7 @@ namespace LearningDiary
                               "\n\n*********************************************************************\n");
         }
 
-        public static void FindTopicByTitle(string url)
+        public static Topic FindTopicByTitle(string url)
         {
             Console.WriteLine("Give topic title to search");
             string searchTitle = Console.ReadLine();
@@ -82,6 +118,7 @@ namespace LearningDiary
             }
             else
                 Console.WriteLine("Topic was not found in current diary");
+            return wantedTopic.ToList()[0];
         }
 
         public static void FindTopicById(string url)
