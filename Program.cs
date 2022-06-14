@@ -28,13 +28,7 @@ namespace LearningDiary
             {
                 PrintTopics(url);
 
-                //Console.WriteLine("Find a specific topic? (yes/no)");
-                //answerToStart = Console.ReadLine().ToLower();
-                //if (answerToStart == "yes")
-                //{
-                //    Console.WriteLine("Search with title give 1 search with id give 2");
-                //    ...
-                //}
+                FindSpecificTopic(url);
             }
             else if (answerToStart == "yes")
             {
@@ -43,10 +37,85 @@ namespace LearningDiary
             }
         }
 
+        public static void FindSpecificTopic(string url)
+        {
+            string answerToStart;
+            Console.WriteLine("\nFind a specific topic? (yes/no)");
+            answerToStart = Console.ReadLine().ToLower();
+            while (answerToStart == "yes")
+            {
+                Console.WriteLine("Type 1 to search with title or 2 to search with id");
+                string answer12 = Console.ReadLine();
+                while (answer12 != "1" && answer12 != "2")
+                {
+                    Console.WriteLine("Try again.\nType 1 to search with title, or 2 to search with id");
+                    answer12 = Console.ReadLine();
+                }
+                if (answer12 == "1")
+                    FindTopicByTitle(url);
+                else if (answer12 == "2")
+                    FindTopicById(url);
+
+                Console.WriteLine("\nFind another specific topic? (yes/no)");
+                answerToStart = Console.ReadLine().ToLower();
+            }
+        }
+
+        public static void Welcome()
+        {
+            Console.WriteLine("*********************************************************************\n\nWelcome to Learning diary console app!" +
+                              "\n\nAnswer questions as stated.\nYou can always just press enter to skip question or answer no." +
+                              "\n\n*********************************************************************\n");
+        }
+
+        public static void FindTopicByTitle(string url)
+        {
+            Console.WriteLine("Give topic title to search");
+            string searchTitle = Console.ReadLine();
+
+            List<Topic> topicList = FileTxtToTopiclist(url);
+
+            IEnumerable<Topic> wantedTopic = topicList.Where(aihe => aihe.Title == searchTitle);
+            if (wantedTopic.Any())
+            {
+                PrintTopics(wantedTopic.ToList()); // tässä menee lista -> enumerable -> list. Täytyy katsoa saako yksikertaistettua
+            }
+            else
+                Console.WriteLine("Topic was not found in current diary");
+        }
+
+        public static void FindTopicById(string url)
+        {
+            const bool tryAgain = true;
+            Console.WriteLine("Give topic id to search");
+            int? searchId;
+            while (tryAgain)
+            {
+                try
+                {
+                    searchId = Int32.Parse(Console.ReadLine());
+                    break;
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Input seems to be incorrect. Try again\nGive topic id to search");
+
+                }
+            }
+
+            List<Topic> topicList = FileTxtToTopiclist(url);
+            
+            IEnumerable<Topic> wantedTopic = topicList.Where(aihe => aihe.Id == searchId);
+            if (wantedTopic.Any())
+                PrintTopics(wantedTopic.ToList()); // tässä menee lista -> enumerable -> list. Täytyy katsoa saako yksikertaistettua
+            else
+                Console.WriteLine("Topic was not found in current diary");
+        }
+
         public static List<Topic> FileTxtToTopiclist(string url)
         {
             string[] fileTextArray = File.ReadAllText(url).Split("###");
-            fileTextArray = fileTextArray.Take(fileTextArray.Length - 1).ToArray(); //removes last empty element from array (I need to change the file structure at some point
+            fileTextArray = fileTextArray.Take(fileTextArray.Length - 1).ToArray(); //removes last empty element from array (I need to change the file structure at some point)
             List<Topic> topicList = new List<Topic>();
             int headingLength;
             for (int i = 0; i < fileTextArray.Length; i++)
@@ -112,7 +181,7 @@ namespace LearningDiary
             if (taskArray.Any())
             {
                 int headingLength;
-                for (int i = 1; i < taskArray.Length; i++) //taskArray first element is null so i starts from one
+                for (int i = 1; i < taskArray.Length; i++) //taskArray first element is null so i starts from one (need to clean this sometime)
                 {
                     taskList.Add(new Task());
                     string[] taskFieldsArray = taskArray[i].Split("+++");
@@ -162,35 +231,6 @@ namespace LearningDiary
             return taskList;
         }
 
-        public static void FindTopicByTitle(string url, string searchTitle)
-        {
-            List <Topic> topicList = FileTxtToTopiclist(url);
-
-            //if (File.Exists(url) && new FileInfo(url).Length != 0)
-            //{
-
-            //    // Creating Dictionary of Topics by title
-            //    Dictionary<string, string[]> topicDictionary = new Dictionary<string, string[]>();
-            //    string[] fileTextAsArray = File.ReadAllText(url).Split("###");
-            //    int titleHeadingLenght = 5;
-            //    for (int i = 0; i < fileTextAsArray.Length - 1; i++)
-            //    {
-            //        string[] topicFieldsArray = fileTextAsArray[i].Split("##");
-            //        string titleKey = topicFieldsArray[1].Substring(titleHeadingLenght, topicFieldsArray[1].Length - titleHeadingLenght + 1);
-            //        if (titleKey != " ")
-            //            topicDictionary.Add(titleKey, topicFieldsArray);
-            //    }
-
-            //}
-        }
-
-        public static void Welcome()
-        {
-            Console.WriteLine("*********************************************************************\n\nWelcome to Learning diary console app!" +
-                              "\n\nAnswer questions as stated.\nYou can always just press enter to skip question or answer no." +
-                              "\n\n*********************************************************************\n");
-        }
-
         public static void PrintTopics(string url)
         {
             Console.Clear();
@@ -206,6 +246,25 @@ namespace LearningDiary
                     }
                     else 
                         Console.WriteLine($"{value.Name}: {value.GetValue(readTopics[i])}");
+                }
+                Console.WriteLine("\n------------------------------------------------------\n");
+            }
+        }
+
+        public static void PrintTopics(List<Topic> topicList)
+        {
+            Console.Clear();
+            for (int i = 0; i < topicList.Count; i++)
+            {
+                foreach (var value in topicList[i].GetType().GetProperties())
+                {
+                    if (value.Name == "TaskList" && topicList[i].TaskList != null)
+                    {
+                        Console.WriteLine($"\n{value.Name}:\n");
+                        PrintTasks(topicList[i].TaskList);
+                    }
+                    else
+                        Console.WriteLine($"{value.Name}: {value.GetValue(topicList[i])}");
                 }
                 Console.WriteLine("\n------------------------------------------------------\n");
             }
@@ -292,18 +351,7 @@ namespace LearningDiary
 
         public static List<Topic> CreateTopics(string answerToStart, string url)
         {
-            int nextId;
-
-            //Hakee viimeisen Topic Idn tiedostosta
-            if (File.Exists(url) && new FileInfo(url).Length != 0)
-            {
-                string[] fileTextAsArray = File.ReadAllText(url).Split("###");
-                string lastTopicStr = fileTextAsArray[fileTextAsArray.Length - 2];
-                int idHeaderLength = 4; // maaginen 4 tulee koska "ID: " on neljä merkkiä
-                nextId = Convert.ToInt32(lastTopicStr.Substring(idHeaderLength, lastTopicStr.IndexOf('#') - idHeaderLength)) + 1;
-            }
-            else
-                nextId = 0;
+            int nextId = GetLatestTopicId(url);
  
             List<Topic> topicList = new List<Topic>();
             string topicProgressAnswer;
@@ -417,6 +465,21 @@ namespace LearningDiary
             return topicList;
         }
 
+        public static int GetLatestTopicId(string url)
+        {
+            int nextId;
+            List<Topic> existingTopics = new List<Topic>();
+            if (File.Exists(url) && new FileInfo(url).Length != 0)
+            {
+                existingTopics = FileTxtToTopiclist(url);
+                nextId = existingTopics[existingTopics.Count - 1].Id;
+            }
+            else
+                nextId = 0;
+
+            return nextId;
+        }
+
         public static List<Task> CreateTasks(string taskAddAnswer)
         {
             Console.Clear();
@@ -426,7 +489,7 @@ namespace LearningDiary
             string taskDeadline;
 
             int nextTaskId = 0;
-            bool tryAgain = true;
+            const bool tryAgain = true;
 
             while (taskAddAnswer == "yes")
             {
