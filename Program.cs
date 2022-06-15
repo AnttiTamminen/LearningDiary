@@ -9,17 +9,23 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
+            // ohjelma kaatuu jos Topic ei löydy korjaa miten siihen suhtaudutaan
+
             string url = @"C:\Visual Studio\Projects\LearningDiary\Diary.txt";
 
             Welcome();
 
             Console.WriteLine("Do you want to input a topic? (yes/no)");
             string answerToStart = Console.ReadLine().ToLower();
-            if (answerToStart == "yes")
+            List<Topic> topicList = new List<Topic>();
+            while (answerToStart == "yes")
             {
-                List<Topic> createdTopics = CreateTopics(answerToStart, url);
+                topicList.Add(new Topic());
+                topicList[topicList.Count-1] = CreateTopic(true, url, topicList[topicList.Count - 1]);
+                TopicsToTxtfile(topicList, url);
 
-                TopicsToTxtfile(createdTopics, url);
+                Console.WriteLine("Do you want to input another topic (yes/no)");
+                answerToStart = Console.ReadLine();
             }
 
             Console.WriteLine("Do you want to see list of all topics? (yes/no)");
@@ -29,6 +35,8 @@ namespace LearningDiary
                 PrintTopics(url);
 
                 FindModifyTopic(url);
+
+                PrintTopics(url);
             }
             else if (answerToStart == "yes")
             {
@@ -53,9 +61,9 @@ namespace LearningDiary
                     answer12 = Console.ReadLine();
                 }
                 if (answer12 == "1")
-                    wantedTopic = FindTopicByTitle(url);
+                    wantedTopic = FindTopicByTitle(url).ToList()[0];
                 else if (answer12 == "2")
-                    FindTopicById(url);
+                    wantedTopic = FindTopicById(url).ToList()[0];
 
                 Console.WriteLine("Do you want to modify/remove this topic?");
                 answerToStart = Console.ReadLine().ToLower();
@@ -82,8 +90,8 @@ namespace LearningDiary
         public static void ModifyTopic(string url, Topic topicToModify)
         {
             List<Topic> oldTopicList = FileTxtToTopiclist(url);
-            int index = oldTopicList.IndexOf(topicToModify);
-            oldTopicList[index] = topicToModify;
+            int index = oldTopicList.FindIndex(topic => topic.Id == topicToModify.Id); 
+            oldTopicList[index] = CreateTopic(false, url, topicToModify);
             File.Delete(url);
             TopicsToTxtfile(oldTopicList, url);
         }
@@ -91,7 +99,7 @@ namespace LearningDiary
         public static void RemoveTopic(string url, Topic topicToRemove)
         {
             List<Topic> oldTopicList = FileTxtToTopiclist(url);
-            int index = oldTopicList.IndexOf(topicToRemove);
+            int index = oldTopicList.FindIndex(topic => topic.Id == topicToRemove.Id);
             oldTopicList.RemoveAt(index);
             File.Delete(url);
             TopicsToTxtfile(oldTopicList, url);
@@ -104,7 +112,7 @@ namespace LearningDiary
                               "\n\n*********************************************************************\n");
         }
 
-        public static Topic FindTopicByTitle(string url)
+        public static IEnumerable<Topic> FindTopicByTitle(string url)
         {
             Console.WriteLine("Give topic title to search");
             string searchTitle = Console.ReadLine();
@@ -118,10 +126,10 @@ namespace LearningDiary
             }
             else
                 Console.WriteLine("Topic was not found in current diary");
-            return wantedTopic.ToList()[0];
+            return wantedTopic;
         }
 
-        public static void FindTopicById(string url)
+        public static IEnumerable<Topic> FindTopicById(string url)
         {
             const bool tryAgain = true;
             Console.WriteLine("Give topic id to search");
@@ -147,6 +155,7 @@ namespace LearningDiary
                 PrintTopics(wantedTopic.ToList()); // tässä menee lista -> enumerable -> list. Täytyy katsoa saako yksikertaistettua
             else
                 Console.WriteLine("Topic was not found in current diary");
+            return wantedTopic;
         }
 
         public static List<Topic> FileTxtToTopiclist(string url)
@@ -386,120 +395,138 @@ namespace LearningDiary
             File.AppendAllText(url, "+++");
         }
 
-        public static List<Topic> CreateTopics(string answerToStart, string url)
+        public static Topic CreateTopic(bool createNew, string url, Topic newTopic)
         {
-            int nextId = GetLatestTopicId(url);
- 
-            List<Topic> topicList = new List<Topic>();
-            string topicProgressAnswer;
-            string estimatedTimeAnswer;
-            string startDate;
-            string completeDate;
-            bool tryAgain = true;
-
-            while (answerToStart == "yes")
+            if (createNew)
             {
-                topicList.Add(new Topic());
+                int nextId = GetLatestTopicId(url);
+                newTopic.Id = nextId;
+            }
 
-                // Adding Id
-                topicList[topicList.Count - 1].Id = nextId;
+            // Adding/modifying title
+            Console.WriteLine("Give Title or press enter");
+            string titleAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(titleAnswer))
+                newTopic.Title = titleAnswer;
 
-                // Adding title
-                Console.WriteLine("Give Title");
-                topicList[topicList.Count - 1].Title = Console.ReadLine();
+            // Adding/modifying description
+            Console.WriteLine("Give description or press enter");
+            string descAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(descAnswer))
+                newTopic.Description = descAnswer;
 
-                // Addin description
-                Console.WriteLine("Give description");
-                topicList[topicList.Count - 1].Description = Console.ReadLine();
-
-                // Adding time to master
-                Console.WriteLine("Give estimated time to master in hours");
+            const bool tryAgain = true;
+            // Adding/modifying time to master
+            Console.WriteLine("Give estimated time to master in hours or press enter");
+            string timeMasterAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(timeMasterAnswer)) 
+            {
                 while (tryAgain)
                 {
                     try
                     {
-                        estimatedTimeAnswer = Console.ReadLine();
-                        if (!String.IsNullOrEmpty(estimatedTimeAnswer))
-                            topicList[topicList.Count - 1].EstimatedTimeToMaster = double.Parse(estimatedTimeAnswer);
+                        if (!String.IsNullOrEmpty(timeMasterAnswer))
+                            newTopic.EstimatedTimeToMaster = double.Parse(timeMasterAnswer);
                         break;
                     }
                     catch (Exception)
                     {
-                        Console.WriteLine("Input seems to be incorrect format.\nGive estimated time tom master in hours and use \",\" as decimal mark");
+                        Console.WriteLine("Input seems to be incorrect format.\nGive estimated time to master in hours and use \",\" as decimal mark");
+                        timeMasterAnswer = Console.ReadLine();
                     }
                 }
+            }
+            
 
-                // Adding source
-                Console.WriteLine("Give source");
-                topicList[topicList.Count - 1].Source = Console.ReadLine();
+            // Adding/modifying source
+            Console.WriteLine("Give source or press enter");
+            string sourceAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(sourceAnswer))
+            {
+                newTopic.Source = sourceAnswer;
+            }
 
-                // Adding start date
-                Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM)");
+            // Adding/modifying start date
+            Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM) or press enter");
+            string startAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(startAnswer))
+            {
                 while (tryAgain)
                 {
                     try
                     {
-                        startDate = Console.ReadLine();
-                        if (!String.IsNullOrEmpty(startDate))
-                            topicList[topicList.Count - 1].StartLearningDate = Convert.ToDateTime(startDate);
+                        if (!String.IsNullOrEmpty(startAnswer))
+                            newTopic.StartLearningDate = Convert.ToDateTime(startAnswer);
                         break;
                     }
                     catch (Exception)
                     {
                         Console.WriteLine("Input seems to be incorrect format.\nGive start date in format (YYYY, MM, DD, HH:MM)");
+                        startAnswer = Console.ReadLine();
                     }
                 }
+            }
 
-                // Adding progress status
-                Console.WriteLine("Is topic in progress (yes/no)");
-                topicProgressAnswer = Console.ReadLine().ToLower();
-                if (topicProgressAnswer == "yes")
-                    topicList[topicList.Count - 1].InProgress = true;
-                else 
-                    topicList[topicList.Count - 1].InProgress = false;
+            // Adding/modifying progress status
+            Console.WriteLine("Is topic in progress (yes/no) or press enter");
+            string progressAnswer = Console.ReadLine().ToLower();
+            if (!String.IsNullOrEmpty(progressAnswer))
+            {
+                if (progressAnswer == "yes")
+                    newTopic.InProgress = true;
+                else if (progressAnswer == "no")
+                    newTopic.InProgress = false;
+            }
 
-                // Adding completion date
-                if (topicList[topicList.Count - 1].InProgress == false)
+            // Adding/modifying completion date completion date
+            if (newTopic.InProgress == false)
+            {
+                Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM) or press enter");
+                string completeDate = Console.ReadLine();
+                if (!String.IsNullOrEmpty(completeDate))
                 {
-                    Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM)");
                     while (tryAgain)
                     {
                         try
                         {
-                            completeDate = Console.ReadLine();
-                            if (!String.IsNullOrEmpty(completeDate))
-                                topicList[topicList.Count - 1].CompletionDate = Convert.ToDateTime(completeDate);
+                            if (!string.IsNullOrEmpty(completeDate)) 
+                                newTopic.CompletionDate = DateTime.Parse(completeDate);
                             break;
                         }
                         catch (Exception)
                         {
                             Console.WriteLine("Input seems to be incorrect format.\nGive completion date in format (YYYY, MM, DD, HH:MM)");
+                            completeDate = Console.ReadLine();
                         }
                     }
                 }
+            }
 
-                // Adding time spent
-                if (topicList[topicList.Count - 1].CompletionDate != null &&
-                    topicList[topicList.Count - 1].StartLearningDate != null)
-                {
-                    topicList[topicList.Count - 1].TimeSpent = ((TimeSpan)(topicList[topicList.Count - 1].CompletionDate - topicList[topicList.Count - 1].StartLearningDate)).TotalHours;
-                }
+            // Adding time spent
+            if (newTopic.CompletionDate != null && newTopic.StartLearningDate != null)
+                newTopic.TimeSpent = ((TimeSpan)(newTopic.CompletionDate - newTopic.StartLearningDate)).TotalHours;
 
-                // Adding tasks
+            // Adding/modifying tasks 
+            if (createNew)
+            {
                 Console.WriteLine("Do you want to add task to this topic? (yes/no)");
                 string taskAddAnswer = Console.ReadLine().ToLower();
                 if (taskAddAnswer == "yes")
                 {
-                    topicList[topicList.Count - 1].TaskList = CreateTasks(taskAddAnswer);
+                    newTopic.TaskList = CreateTasks(taskAddAnswer);
                 }
-
-                Console.WriteLine("Do you want to input another topic? (yes/no)");
-                answerToStart = Console.ReadLine().ToLower();
-                Console.Clear();
-
-                nextId += 1;
             }
-            return topicList;
+            //else
+            //{
+            //    Console.WriteLine("Do you want to update this topics tasks or add task? (yes/no)");
+            //    string taskAnswer = Console.ReadLine().ToLower();
+            //    if (taskAnswer == "yes")
+            //    {
+            //        //JATKA TÄSTÄ
+            //    }
+            //}
+
+            return newTopic;
         }
 
         public static int GetLatestTopicId(string url)
@@ -581,10 +608,10 @@ namespace LearningDiary
 
                 // Adding complete status
                 Console.WriteLine("Is task complete (yes/no)");
-                taskCompleteAnswer = Console.ReadLine();
-                if (taskCompleteAnswer.ToLower() == "yes")
+                taskCompleteAnswer = Console.ReadLine().ToLower();
+                if (taskCompleteAnswer == "yes")
                     taskList[taskList.Count - 1].Done = true;
-                else
+                else if (taskCompleteAnswer == "no")
                     taskList[taskList.Count - 1].Done = false;
 
                 Console.WriteLine("Do you want to input another task to this topic? yes/no");
@@ -606,7 +633,7 @@ namespace LearningDiary
         public double? TimeSpent { get; set; }
         public string Source { get; set; }
         public DateTime? StartLearningDate { get; set; }
-        public bool InProgress { get; set; }
+        public bool? InProgress { get; set; }
         public DateTime? CompletionDate { get; set; }
         public List<Task> TaskList { get; set; }
     }
@@ -627,6 +654,6 @@ namespace LearningDiary
         }
         public EnumPriority? Priority { get; set; }
 
-        public bool Done { get; set; }
+        public bool? Done { get; set; }
     }
 }
