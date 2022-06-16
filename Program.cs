@@ -9,8 +9,6 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
-            // ohjelma kaatuu jos Topic ei löydy korjaa miten siihen suhtaudutaan
-
             string url = @"C:\Visual Studio\Projects\LearningDiary\Diary.txt";
 
             Welcome();
@@ -49,6 +47,8 @@ namespace LearningDiary
         {
             string answerToStart;
             Topic wantedTopic = new Topic();
+            IEnumerable<Topic> foundTopic;
+
             Console.WriteLine("\nFind a specific topic? (yes/no)");
             answerToStart = Console.ReadLine().ToLower();
             while (answerToStart == "yes")
@@ -60,26 +60,43 @@ namespace LearningDiary
                     Console.WriteLine("Try again.\nType 1 to search with title, or 2 to search with id");
                     answer12 = Console.ReadLine();
                 }
-                if (answer12 == "1")
-                    wantedTopic = FindTopicByTitle(url).ToList()[0];
-                else if (answer12 == "2")
-                    wantedTopic = FindTopicById(url).ToList()[0];
 
-                Console.WriteLine("Do you want to modify/remove this topic?");
-                answerToStart = Console.ReadLine().ToLower();
-                if (answerToStart == "yes")
+                if (answer12 == "1")
                 {
-                    Console.WriteLine("Type 1 to modify topic or 2 to remove it");
-                    answer12 = Console.ReadLine();
-                    while (answer12 != "1" && answer12 != "2")
+                    foundTopic = FindTopicByTitle(url);
+
+                    if (foundTopic.Any())
                     {
-                        Console.WriteLine("Try again.\nType 1 to modify topic, or 2 to remove it");
-                        answer12 = Console.ReadLine();
+                        wantedTopic = foundTopic.ToList()[0];
                     }
-                    if (answer12 == "1")
-                       ModifyTopic(url, wantedTopic); 
-                    else if (answer12 == "2"){}
-                       RemoveTopic(url, wantedTopic); 
+                }
+                else if (answer12 == "2")
+                {
+                    foundTopic = FindTopicById(url);
+                    if (foundTopic.Any())
+                    {
+                        wantedTopic = FindTopicById(url).ToList()[0];
+                    }
+                }
+
+                if (wantedTopic.Id != -999)
+                {
+                    Console.WriteLine("Do you want to modify/remove this topic?");
+                    answerToStart = Console.ReadLine().ToLower();
+                    if (answerToStart == "yes")
+                    {
+                        Console.WriteLine("Type 1 to modify topic or 2 to remove it");
+                        answer12 = Console.ReadLine();
+                        while (answer12 != "1" && answer12 != "2")
+                        {
+                            Console.WriteLine("Try again.\nType 1 to modify topic, or 2 to remove it");
+                            answer12 = Console.ReadLine();
+                        }
+                        if (answer12 == "1")
+                            ModifyTopic(url, wantedTopic);
+                        else if (answer12 == "2")
+                            RemoveTopic(url, wantedTopic);
+                    }
                 }
 
                 Console.WriteLine("\nFind another specific topic? (yes/no)");
@@ -516,15 +533,15 @@ namespace LearningDiary
                     newTopic.TaskList = CreateTasks(taskAddAnswer);
                 }
             }
-            //else
-            //{
-            //    Console.WriteLine("Do you want to update this topics tasks or add task? (yes/no)");
-            //    string taskAnswer = Console.ReadLine().ToLower();
-            //    if (taskAnswer == "yes")
-            //    {
-            //        //JATKA TÄSTÄ
-            //    }
-            //}
+            else
+            {
+                Console.WriteLine("Do you want to update this topics tasks or add task? (yes/no)");
+                string taskAnswer = Console.ReadLine().ToLower();
+                if (taskAnswer == "yes")
+                {
+                    //JATKA TÄSTÄ
+                }
+            }
 
             return newTopic;
         }
@@ -626,7 +643,7 @@ namespace LearningDiary
 
     public class Topic
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = -999;
         public string Title { get; set; }
         public string Description { get; set; }
         public double? EstimatedTimeToMaster { get; set; }
