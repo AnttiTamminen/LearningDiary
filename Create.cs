@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace LearningDiary
@@ -121,101 +122,149 @@ namespace LearningDiary
             {
                 Console.WriteLine("Do you want to add task to this topic? (yes/no)");
                 string taskAddAnswer = Console.ReadLine().ToLower();
-                if (taskAddAnswer == "yes")
+                while (taskAddAnswer == "yes")
                 {
-                    newTopic.TaskList = CreateTasks(taskAddAnswer);
+                    newTopic.TaskList.Add(new Task());
+                    newTopic.TaskList[newTopic.TaskList.Count - 1] =
+                        CreateTasks(true, url, newTopic.Id, newTopic.TaskList[newTopic.TaskList.Count - 1]);
+                    Console.WriteLine("Do you want to add another task to this topic? (yes/no)");
+                    taskAddAnswer = Console.ReadLine().ToLower();
                 }
             }
-            //else
-            //{
-            //    Console.WriteLine("Do you want to update this topics tasks or add task? (yes/no)");
-            //    string taskAnswer = Console.ReadLine().ToLower();
-            //    if (taskAnswer == "yes")
-            //    {
-            //        //JATKA TÄSTÄ
-            //    }
-            //}
+            else
+            {
+                Console.WriteLine("Do you want to modify (1) remove (2) add (3) this topics tasks");
+                string taskAnswer = Console.ReadLine().ToLower();
+                string taskMod = "";
+
+                if (newTopic.TaskList != null && (taskAnswer == "1" || taskAnswer == "2"))
+                {
+                    Console.WriteLine("Give task id (1) or Title (2)");
+                    taskMod = Console.ReadLine();
+                }
+                else if (newTopic.TaskList == null && (taskAnswer == "1" || taskAnswer == "2"))
+                    Console.WriteLine("Topic does not have any tasks to modify/remove");
+
+                if (taskAnswer == "1" && newTopic.TaskList != null) 
+                {
+                    if (taskMod == "1")
+                    {
+                        Console.WriteLine("Give task id");
+                        string idTask = Console.ReadLine();
+                        Task taskToModify = newTopic.TaskList.Where(task => task.Id == Int32.Parse(idTask)).Single();
+                        FindModifyRemove.ModifyTask(url, taskToModify, newTopic.Id);
+                    }
+                    else if (taskMod == "2")
+                    {
+                        Console.WriteLine("Give task title");
+                        string titleTask = Console.ReadLine();
+                        Task taskToModify = newTopic.TaskList.Where(task => task.Title == titleTask).Single();
+                        FindModifyRemove.ModifyTask(url, taskToModify, newTopic.Id);
+                    }
+                }
+                else if (taskAnswer == "2" && newTopic.TaskList != null)
+                {
+                    if (taskMod == "1")
+                    {
+                        Console.WriteLine("Give task id");
+                        string idTask = Console.ReadLine();
+                        Task taskToRemove = newTopic.TaskList.Where(task => task.Id == Int32.Parse(idTask)).Single();
+                        FindModifyRemove.RemoveTask(url, taskToRemove, newTopic.Id);
+                    }
+                    else if (taskMod == "2")
+                    {
+                        Console.WriteLine("Give task title");
+                        string titleTask = Console.ReadLine();
+                        Task taskToRemove = newTopic.TaskList.Where(task => task.Title == titleTask).Single();
+                        FindModifyRemove.RemoveTask(url, taskToRemove, newTopic.Id);
+                    }
+                }
+                else if (taskAnswer == "3") 
+                {
+                    if (newTopic.TaskList == null)
+                        newTopic.TaskList = new List<Task>();
+                    newTopic.TaskList.Add(new Task());
+                    newTopic.TaskList[newTopic.TaskList.Count - 1] = CreateTasks(true, url, newTopic.Id, newTopic.TaskList[newTopic.TaskList.Count - 1]);
+                }
+            }
 
             return newTopic;
         }
 
-        public static List<Task> CreateTasks(string taskAddAnswer)
+        public static Task CreateTasks(bool nTask, string url, int topicId, Task newTask)
         {
             Console.Clear();
-            List<Task> taskList = new List<Task>();
-            string taskPrioAnswer;
-            string taskCompleteAnswer;
-            string taskDeadline;
 
-            int nextTaskId = 0;
             const bool tryAgain = true;
 
-            while (taskAddAnswer == "yes")
+            if (!nTask)
+                newTask.Id = FileToVariable.GetLatestTaskId(url, topicId); 
+
+            // Adding title
+            Console.WriteLine("Give Title to Task or press enter");
+            string answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Title = answer;
+
+            // Adding description
+            Console.WriteLine("Give description to Task or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Title = answer;
+
+            // Adding deadline
+            Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM) or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
             {
-                taskList.Add(new Task());
-
-                // Adding Id
-                taskList[taskList.Count - 1].Id = nextTaskId;
-
-                // Adding title
-                Console.WriteLine("Give Title to Task");
-                taskList[taskList.Count - 1].Title = Console.ReadLine();
-
-                // Adding description
-                Console.WriteLine("Give description to Task");
-                taskList[taskList.Count - 1].Description = Console.ReadLine();
-
-                // Adding deadline
-                Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM)");
                 while (tryAgain)
                 {
                     try
                     {
-                        taskDeadline = Console.ReadLine();
-                        if (!String.IsNullOrEmpty(taskDeadline))
-                            taskList[taskList.Count - 1].Deadline = Convert.ToDateTime(taskDeadline);
+                        newTask.Deadline = Convert.ToDateTime(answer);
                         break;
                     }
                     catch (Exception)
                     {
                         Console.WriteLine("Input seems to be incorrect format.\nGive deadline date in format (YYYY, MM, DD, HH:MM)");
+                        answer = Console.ReadLine();
                     }
                 }
-
-                // Adding priority
-                Console.WriteLine("Give priority to Task (Low/Medium/High)");
-                taskPrioAnswer = Console.ReadLine();
-                while (taskPrioAnswer != "Low" && taskPrioAnswer != "Medium" && taskPrioAnswer != "High" && !String.IsNullOrEmpty(taskPrioAnswer))
-                {
-                    Console.WriteLine("Input seems to be incorrect format.\nGive priority to Task as one of these: (Low/Medium/High), notice upper and lower cases");
-                    taskPrioAnswer = Console.ReadLine();
-                }
-                if (taskPrioAnswer == "High")
-                    taskList[taskList.Count - 1].Priority = Task.EnumPriority.High;
-                else if (taskPrioAnswer == "Medium")
-                    taskList[taskList.Count - 1].Priority = Task.EnumPriority.Medium;
-                else if (taskPrioAnswer == "Low")
-                    taskList[taskList.Count - 1].Priority = Task.EnumPriority.Low;
-
-                // Adding notes
-                Console.WriteLine("Add note text to task");
-                taskList[taskList.Count - 1].Notes = new List<string>(Console.ReadLine().Split(' '));
-
-                // Adding complete status
-                Console.WriteLine("Is task complete (yes/no)");
-                taskCompleteAnswer = Console.ReadLine().ToLower();
-                if (taskCompleteAnswer == "yes")
-                    taskList[taskList.Count - 1].Done = true;
-                else if (taskCompleteAnswer == "no")
-                    taskList[taskList.Count - 1].Done = false;
-
-                Console.WriteLine("Do you want to input another task to this topic? yes/no");
-                taskAddAnswer = Console.ReadLine().ToLower();
-                Console.Clear();
-
-                nextTaskId += 1;
             }
-            return taskList;
+
+            // Adding priority
+            Console.WriteLine("Give priority to Task (Low/Medium/High) or press enter"); 
+            answer = Console.ReadLine();
+            while (answer != "Low" && answer != "Medium" && answer != "High" && !String.IsNullOrEmpty(answer))
+            {
+                Console.WriteLine("Input seems to be incorrect format.\nGive priority to Task as one of these: (Low/Medium/High), notice upper and lower cases");
+                answer = Console.ReadLine();
+            }
+            if (answer == "High")
+                newTask.Priority = Task.EnumPriority.High;
+            else if (answer == "Medium")
+                newTask.Priority = Task.EnumPriority.Medium;
+            else if (answer == "Low")
+                newTask.Priority = Task.EnumPriority.Low;
+
+            // Adding notes
+            Console.WriteLine("Write note to task or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Notes = new List<string>(answer.Split(' '));
+
+            // Adding complete status
+            Console.WriteLine("Is task complete (yes/no) or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+            {
+                if (answer == "yes")
+                    newTask.Done = true;
+                else if (answer == "no")
+                    newTask.Done = false;
+            }
+
+            return newTask;
         }
     }
 }

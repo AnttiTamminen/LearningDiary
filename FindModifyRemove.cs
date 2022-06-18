@@ -135,5 +135,27 @@ namespace LearningDiary
                 Console.WriteLine("Topic was not found in current diary");
             return wantedTopic;
         }
+
+        public static void ModifyTask(string url, Task taskToModify, int topicId)
+        {
+            List<Topic> oldTopicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Task> oldTaskList = oldTopicList[topicId].TaskList;
+            int index = oldTaskList.FindIndex(task => task.Id == taskToModify.Id);
+            oldTaskList[index] = Create.CreateTasks(false, url, topicId, taskToModify);
+            oldTopicList[topicId].TaskList = oldTaskList;
+            File.Delete(url);
+            ToTxtFile.TopicsToTxtfile(oldTopicList, url);
+        }
+
+        public static void RemoveTask(string url, Task taskToRemove, int topicId)
+        {
+            List<Topic> oldTopicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Task> oldTaskList = oldTopicList[topicId].TaskList;
+            int index = oldTaskList.FindIndex(task => task.Id == taskToRemove.Id);
+            oldTaskList.RemoveAt(index);
+            oldTopicList[topicId].TaskList = oldTaskList;
+            File.Delete(url);
+            ToTxtFile.TopicsToTxtfile(oldTopicList, url);
+        }
     }
 }
