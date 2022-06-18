@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -131,14 +130,25 @@ namespace LearningDiary
 
         public static int GetLatestTopicId(string url)
         {
-            int nextId;
+            int nextId = 0;
             if (File.Exists(url) && new FileInfo(url).Length != 0)
             {
                 List<Topic> existingTopics = FileTxtToTopiclist(url);
                 nextId = existingTopics.Max(topic => topic.Id) + 1; 
             }
-            else
-                nextId = 0;
+
+            return nextId;
+        }
+
+        public static int GetLatestTaskId(string url, int topicId)
+        {
+            int nextId = 0;
+            if (File.Exists(url) && new FileInfo(url).Length != 0)
+            {
+                List<Topic> existingTopics = FileTxtToTopiclist(url);
+                List<Task> existingTasks = existingTopics[topicId].TaskList;
+                nextId = existingTasks.Max(task => task.Id) + 1;
+            }
 
             return nextId;
         }
