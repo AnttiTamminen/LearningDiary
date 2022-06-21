@@ -8,7 +8,7 @@ namespace LearningDiary
         public static void PrintTopics(string url)
         {
             Console.Clear();
-            List<Topic> readTopics = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> readTopics = ImportToVariable.FileTxtToTopiclist(url);
             for (int i = 0; i < readTopics.Count; i++)
             {
                 foreach (var value in readTopics[i].GetType().GetProperties())

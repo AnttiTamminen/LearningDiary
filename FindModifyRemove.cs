@@ -74,20 +74,20 @@ namespace LearningDiary
 
         public static void ModifyTopic(string url, Topic topicToModify)
         {
-            List<Topic> oldTopicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> oldTopicList = ImportToVariable.FileTxtToTopiclist(url);
             int index = oldTopicList.FindIndex(topic => topic.Id == topicToModify.Id);
             oldTopicList[index] = Create.CreateTopic(false, url, topicToModify);
             File.Delete(url);
-            ToTxtFile.TopicsToTxtfile(oldTopicList, url);
+            SaveData.TopicsToTxtfile(oldTopicList, url);
         }
 
         public static void RemoveTopic(string url, Topic topicToRemove)
         {
-            List<Topic> oldTopicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> oldTopicList = ImportToVariable.FileTxtToTopiclist(url);
             int index = oldTopicList.FindIndex(topic => topic.Id == topicToRemove.Id);
             oldTopicList.RemoveAt(index);
             File.Delete(url);
-            ToTxtFile.TopicsToTxtfile(oldTopicList, url);
+            SaveData.TopicsToTxtfile(oldTopicList, url);
         }
 
         public static IEnumerable<Topic> FindTopicByTitle(string url)
@@ -95,7 +95,7 @@ namespace LearningDiary
             Console.WriteLine("Give topic title to search");
             string searchTitle = Console.ReadLine();
 
-            List<Topic> topicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> topicList = ImportToVariable.FileTxtToTopiclist(url);
 
             IEnumerable<Topic> wantedTopic = topicList.Where(aihe => aihe.Title == searchTitle);
             if (wantedTopic.Any())
@@ -126,7 +126,7 @@ namespace LearningDiary
                 }
             }
 
-            List<Topic> topicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> topicList = ImportToVariable.FileTxtToTopiclist(url);
 
             IEnumerable<Topic> wantedTopic = topicList.Where(aihe => aihe.Id == searchId);
             if (wantedTopic.Any())
@@ -138,24 +138,24 @@ namespace LearningDiary
 
         public static void ModifyTask(string url, Task taskToModify, int topicId)
         {
-            List<Topic> oldTopicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> oldTopicList = ImportToVariable.FileTxtToTopiclist(url);
             List<Task> oldTaskList = oldTopicList[topicId].TaskList;
             int index = oldTaskList.FindIndex(task => task.Id == taskToModify.Id);
             oldTaskList[index] = Create.CreateTasks(false, url, topicId, taskToModify);
             oldTopicList[topicId].TaskList = oldTaskList;
             File.Delete(url);
-            ToTxtFile.TopicsToTxtfile(oldTopicList, url);
+            SaveData.TopicsToTxtfile(oldTopicList, url);
         }
 
         public static void RemoveTask(string url, Task taskToRemove, int topicId)
         {
-            List<Topic> oldTopicList = FileToVariable.FileTxtToTopiclist(url);
+            List<Topic> oldTopicList = ImportToVariable.FileTxtToTopiclist(url);
             List<Task> oldTaskList = oldTopicList[topicId].TaskList;
             int index = oldTaskList.FindIndex(task => task.Id == taskToRemove.Id);
             oldTaskList.RemoveAt(index);
             oldTopicList[topicId].TaskList = oldTaskList;
             File.Delete(url);
-            ToTxtFile.TopicsToTxtfile(oldTopicList, url);
+            SaveData.TopicsToTxtfile(oldTopicList, url);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace LearningDiary
             {
                 topicList.Add(new Topic());
                 topicList[topicList.Count-1] = Create.CreateTopic(true, url, topicList[topicList.Count - 1]);
-                ToTxtFile.TopicsToTxtfile(topicList, url);
+                SaveData.TopicsToTxtfile(topicList, url);
 
                 Console.WriteLine("Do you want to input another topic (yes/no)");
                 answerToStart = Console.ReadLine();

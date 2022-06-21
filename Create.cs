@@ -10,7 +10,7 @@ namespace LearningDiary
         {
             if (createNew)
             {
-                int nextId = FileToVariable.GetLatestTopicId(url);
+                int nextId = ImportToVariable.GetLatestTopicId(url);
                 newTopic.Id = nextId;
             }
 
@@ -124,6 +124,8 @@ namespace LearningDiary
                 string taskAddAnswer = Console.ReadLine().ToLower();
                 while (taskAddAnswer == "yes")
                 {
+                    if (newTopic.TaskList == null)
+                        newTopic.TaskList = new List<Task>();
                     newTopic.TaskList.Add(new Task());
                     newTopic.TaskList[newTopic.TaskList.Count - 1] =
                         CreateTasks(true, url, newTopic.Id, newTopic.TaskList[newTopic.TaskList.Count - 1]);
@@ -198,7 +200,7 @@ namespace LearningDiary
             const bool tryAgain = true;
 
             if (!nTask)
-                newTask.Id = FileToVariable.GetLatestTaskId(url, topicId); 
+                newTask.Id = ImportToVariable.GetLatestTaskId(url, topicId); 
 
             // Adding title
             Console.WriteLine("Give Title to Task or press enter");

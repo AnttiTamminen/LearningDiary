@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LearningDiary.Models;
 
 namespace LearningDiary
 {
-    public class FileToVariable
+    public class ImportToVariable
     {
         public static List<Topic> FileTxtToTopiclist(string url)
         {
@@ -151,6 +152,61 @@ namespace LearningDiary
             }
 
             return nextId;
+        }
+
+        public static List<Topic> DatabaseToTopiclist()
+        {
+            List<Topic> topicList = new List<Topic>();
+            using (LearningDiaryContext newConnection = new LearningDiaryContext())
+            {
+                if (newConnection.Topics.Any())
+                {
+                    for (int i = 0; i < newConnection.Topics.Count(); i++)
+                    {
+                        topicList.Add(new Topic());
+                        topicList[i].Id = newConnection.Topics.ElementAt(i).Id;
+                        topicList[i].Title = newConnection.Topics.ElementAt(i).Title;
+                        topicList[i].Description = newConnection.Topics.ElementAt(i).Description;
+                        topicList[i].EstimatedTimeToMaster = (double)newConnection.Topics.ElementAt(i).TimeToMaster;
+                        topicList[i].TimeSpent = (double)newConnection.Topics.ElementAt(i).TimeSpent;
+                        topicList[i].Source = newConnection.Topics.ElementAt(i).Source;
+                        topicList[i].StartLearningDate = newConnection.Topics.ElementAt(i).StartLearningDate;
+                        topicList[i].InProgress = newConnection.Topics.ElementAt(i).InProgress;
+                        topicList[i].CompletionDate = newConnection.Topics.ElementAt(i).CompletionDate;
+                        topicList[i].TaskList = DatabaseToTask(topicList[i], i);
+
+                    }
+                }
+            }
+            return topicList;
+        }
+
+        public static List<Task> DatabaseToTask(Topic topic, int i)
+        {
+            List<Task> taskList = new List<Task>();
+            using (LearningDiaryContext newConnection = new LearningDiaryContext())
+            {
+                var tasksOfTopic = newConnection.Tasks.Where(task => task.TopicId == newConnection.Topics.ElementAt(i).Id);
+                if (tasksOfTopic.Any())
+                {
+                    for (int j = 0; j < tasksOfTopic.Count(); j++)
+                    {
+                        taskList.Add(new Task());
+                        taskList[i].Id = tasksOfTopic.ElementAt(j).Id;
+                        taskList[i].Title = tasksOfTopic.ElementAt(j).Title;
+                        taskList[i].Description = tasksOfTopic.ElementAt(j).Description;
+                        List<string> dbNotes = tasksOfTopic.ElementAt(j).Notes.Split(' ').ToList();
+                        taskList[i].Notes = dbNotes;
+                        if (tasksOfTopic.ElementAt(j).Priority == "Low")
+                            taskList[i].Priority = EnumPriority.Low;
+                        else if (tasksOfTopic.ElementAt(j).Priority == "Medium")
+                            taskList[i].Priority = EnumPriority.Medium;
+                        else if (tasksOfTopic.ElementAt(j).Priority == "High")
+                            taskList[i].Priority = EnumPriority.High;
+                    }
+                }
+            }
+            return taskList;
         }
     }
 }

@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace LearningDiary
+#nullable disable
+
+namespace LearningDiary.Models
 {
-    public class Task
+    public partial class Task
     {
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public List<string> Notes { get; set; }
+        public string Notes { get; set; }
         public DateTime? Deadline { get; set; }
-        public EnumPriority? Priority { get; set; }
+        public string Priority { get; set; }
         public bool? Done { get; set; }
-        public int? TopicId { get; set; }
-    }
-
-    public enum EnumPriority
-    {
-        Low,
-        Medium,
-        High
+        public int TopicId { get; set; }
     }
 }
