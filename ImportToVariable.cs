@@ -114,11 +114,11 @@ namespace LearningDiary
                         string taskPriority = taskFieldsArray[5].Substring(headingLength,
                             taskFieldsArray[5].Length - headingLength);
                         if (taskPriority == "Low")
-                            taskList[i - 1].Priority = Task.EnumPriority.Low;
+                            taskList[i - 1].Priority = EnumPriority.Low;
                         else if (taskPriority == "Medium")
-                            taskList[i - 1].Priority = Task.EnumPriority.Medium;
+                            taskList[i - 1].Priority = EnumPriority.Medium;
                         else if (taskPriority == "High")
-                            taskList[i - 1].Priority = Task.EnumPriority.High;
+                            taskList[i - 1].Priority = EnumPriority.High;
 
                         headingLength = 6;
                         taskList[i - 1].Done = Convert.ToBoolean(taskFieldsArray[6].Substring(headingLength,
