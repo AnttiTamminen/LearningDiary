@@ -154,57 +154,25 @@ namespace LearningDiary
             return nextId;
         }
 
-        public static List<Topic> DatabaseToTopiclist()
+        public static List<Models.Topic> DatabaseToTopiclist()
         {
-            List<Topic> topicList = new List<Topic>();
+            List<Models.Topic> topicList = new List<Models.Topic>();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
                 if (newConnection.Topics.Any())
-                {
-                    for (int i = 0; i < newConnection.Topics.Count(); i++)
-                    {
-                        topicList.Add(new Topic());
-                        topicList[i].Id = newConnection.Topics.ElementAt(i).Id;
-                        topicList[i].Title = newConnection.Topics.ElementAt(i).Title;
-                        topicList[i].Description = newConnection.Topics.ElementAt(i).Description;
-                        topicList[i].EstimatedTimeToMaster = (double)newConnection.Topics.ElementAt(i).TimeToMaster;
-                        topicList[i].TimeSpent = (double)newConnection.Topics.ElementAt(i).TimeSpent;
-                        topicList[i].Source = newConnection.Topics.ElementAt(i).Source;
-                        topicList[i].StartLearningDate = newConnection.Topics.ElementAt(i).StartLearningDate;
-                        topicList[i].InProgress = newConnection.Topics.ElementAt(i).InProgress;
-                        topicList[i].CompletionDate = newConnection.Topics.ElementAt(i).CompletionDate;
-                        topicList[i].TaskList = DatabaseToTask(topicList[i], i);
-
-                    }
-                }
+                    topicList = newConnection.Topics.ToList();
             }
             return topicList;
         }
 
-        public static List<Task> DatabaseToTask(Topic topic, int i)
+        public static List<Models.Task> DatabaseToTask(Models.Topic topic)
         {
-            List<Task> taskList = new List<Task>();
+            List<Models.Task> taskList = new List<Models.Task>();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                var tasksOfTopic = newConnection.Tasks.Where(task => task.TopicId == newConnection.Topics.ElementAt(i).Id);
+                var tasksOfTopic = newConnection.Tasks.Where(task => task.TopicId == newConnection.Topics.ElementAt(topic.Id).Id).ToList();
                 if (tasksOfTopic.Any())
-                {
-                    for (int j = 0; j < tasksOfTopic.Count(); j++)
-                    {
-                        taskList.Add(new Task());
-                        taskList[i].Id = tasksOfTopic.ElementAt(j).Id;
-                        taskList[i].Title = tasksOfTopic.ElementAt(j).Title;
-                        taskList[i].Description = tasksOfTopic.ElementAt(j).Description;
-                        List<string> dbNotes = tasksOfTopic.ElementAt(j).Notes.Split(' ').ToList();
-                        taskList[i].Notes = dbNotes;
-                        if (tasksOfTopic.ElementAt(j).Priority == "Low")
-                            taskList[i].Priority = EnumPriority.Low;
-                        else if (tasksOfTopic.ElementAt(j).Priority == "Medium")
-                            taskList[i].Priority = EnumPriority.Medium;
-                        else if (tasksOfTopic.ElementAt(j).Priority == "High")
-                            taskList[i].Priority = EnumPriority.High;
-                    }
-                }
+                    taskList = tasksOfTopic;
             }
             return taskList;
         }

@@ -7,6 +7,21 @@ namespace LearningDiary.Models
 {
     public partial class Topic
     {
+        public Topic()
+        {
+            Tasks = new HashSet<Task>();
+            Title = Create.AddTitle();
+            Description = Create.AddDescription();
+            TimeToMaster = Create.AddTimeToMaster();
+            Source = Create.AddSource();
+            StartLearningDate = Create.AddStartLearningDate();
+            InProgress = Create.AddInProgress();
+            if (InProgress == false)
+                CompletionDate = Create.AddCompletionDate();
+            if (CompletionDate != null && StartLearningDate != null)
+                TimeSpent = (decimal)((TimeSpan)(CompletionDate - StartLearningDate)).TotalHours;
+        }
+
         public int Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
@@ -16,5 +31,7 @@ namespace LearningDiary.Models
         public DateTime? StartLearningDate { get; set; }
         public bool? InProgress { get; set; }
         public DateTime? CompletionDate { get; set; }
+
+        public virtual ICollection<Task> Tasks { get; set; }
     }
 }

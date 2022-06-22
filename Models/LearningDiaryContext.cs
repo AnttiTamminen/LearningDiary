@@ -37,32 +37,33 @@ namespace LearningDiary.Models
             {
                 entity.ToTable("Task");
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
-
                 entity.Property(e => e.Deadline).HasColumnType("datetime");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Notes)
-                    .HasMaxLength(8000)
-                    .IsUnicode(false);
+                entity.Property(e => e.Notes).HasColumnType("ntext");
 
                 entity.Property(e => e.Priority)
                     .HasMaxLength(6)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Title)
+                    .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
+
+                entity.HasOne(d => d.Topic)
+                    .WithMany(p => p.Tasks)
+                    .HasForeignKey(d => d.TopicId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Task_Topic");
             });
 
             modelBuilder.Entity<Topic>(entity =>
             {
                 entity.ToTable("Topic");
-
-                entity.Property(e => e.Id).ValueGeneratedNever();
 
                 entity.Property(e => e.CompletionDate).HasColumnType("datetime");
 

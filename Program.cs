@@ -14,12 +14,19 @@ namespace LearningDiary
 
             Console.WriteLine("Do you want to input a topic? (yes/no)");
             string answerToStart = Console.ReadLine().ToLower();
-            List<Topic> topicList = new List<Topic>();
             while (answerToStart == "yes")
             {
-                topicList.Add(new Topic());
-                topicList[topicList.Count-1] = Create.CreateTopic(true, url, topicList[topicList.Count - 1]);
-                SaveData.TopicsToTxtfile(topicList, url);
+                Create.CreateMTopic();
+
+                Console.WriteLine("Do you want to add task to this topic? (yes/no)");
+                answerToStart = Console.ReadLine();
+                while (answerToStart == "yes")
+                {
+                    Create.CreateMTask();
+
+                    Console.WriteLine("Do you want to input another task to this topic (yes/no)");
+                    answerToStart = Console.ReadLine();
+                }
 
                 Console.WriteLine("Do you want to input another topic (yes/no)");
                 answerToStart = Console.ReadLine();

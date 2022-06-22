@@ -15,5 +15,7 @@ namespace LearningDiary.Models
         public string Priority { get; set; }
         public bool? Done { get; set; }
         public int TopicId { get; set; }
+
+        public virtual Topic Topic { get; set; }
     }
 }

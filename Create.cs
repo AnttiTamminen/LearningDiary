@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using LearningDiary.Models;
 
 namespace LearningDiary
 {
@@ -243,11 +244,11 @@ namespace LearningDiary
                 answer = Console.ReadLine();
             }
             if (answer == "High")
-                newTask.Priority = Task.EnumPriority.High;
+                newTask.Priority = EnumPriority.High;
             else if (answer == "Medium")
-                newTask.Priority = Task.EnumPriority.Medium;
+                newTask.Priority = EnumPriority.Medium;
             else if (answer == "Low")
-                newTask.Priority = Task.EnumPriority.Low;
+                newTask.Priority = EnumPriority.Low;
 
             // Adding notes
             Console.WriteLine("Write note to task or press enter");
@@ -267,6 +268,218 @@ namespace LearningDiary
             }
 
             return newTask;
+        }
+
+        public static string AddTitle()
+        {
+            Console.WriteLine("Give Title:");
+            string titleAnswer = Console.ReadLine();
+            while (String.IsNullOrEmpty(titleAnswer))
+            {
+                Console.WriteLine("Topic must have a title. Try again.\nGive Title.");
+                titleAnswer = Console.ReadLine();
+            }
+            return titleAnswer;
+        }
+
+        public static string AddDescription()
+        {
+            Console.WriteLine("Give description or press enter");
+            string descAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(descAnswer))
+                return descAnswer;
+            return null;
+        }
+
+        public static decimal? AddTimeToMaster()
+        {
+            const bool tryAgain = true;
+            Console.WriteLine("Give estimated time to master in hours or press enter");
+            string timeMasterAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(timeMasterAnswer))
+            {
+                while (tryAgain)
+                {
+                    try
+                    {
+                        if (!String.IsNullOrEmpty(timeMasterAnswer))
+                            return decimal.Parse(timeMasterAnswer);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive estimated time to master in hours and use \",\" as decimal mark");
+                        timeMasterAnswer = Console.ReadLine();
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static string AddSource()
+        {
+            Console.WriteLine("Give source or press enter");
+            string sourceAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(sourceAnswer))
+                return sourceAnswer;
+            return null;
+        }
+
+        public static DateTime? AddStartLearningDate()
+        {
+            const bool tryAgain = true;
+            Console.WriteLine("Give date of starting (YYYY, MM, DD, HH:MM) or press enter");
+            string startAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(startAnswer))
+            {
+                while (tryAgain)
+                {
+                    try
+                    {
+                        if (!String.IsNullOrEmpty(startAnswer))
+                            return Convert.ToDateTime(startAnswer);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive start date in format (YYYY, MM, DD, HH:MM)");
+                        startAnswer = Console.ReadLine();
+                    }
+                }
+            }
+            return null;
+        }
+
+        public static bool? AddInProgress()
+        {
+            Console.WriteLine("Is topic in progress (yes/no) or press enter");
+            string progressAnswer = Console.ReadLine().ToLower();
+            if (!String.IsNullOrEmpty(progressAnswer))
+            {
+                if (progressAnswer == "yes")
+                    return true;
+                if (progressAnswer == "no")
+                    return false;
+            }
+            return null;
+        }
+
+        public static DateTime? AddCompletionDate()
+        {
+            const bool tryAgain = true;
+            Console.WriteLine("Give completion date (YYYY, MM, DD, HH:MM) or press enter");
+            string completeDate = Console.ReadLine();
+            if (!String.IsNullOrEmpty(completeDate))
+            {
+                while (tryAgain)
+                {
+                    try
+                    {
+                        if (!string.IsNullOrEmpty(completeDate))
+                            return DateTime.Parse(completeDate);
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive completion date in format (YYYY, MM, DD, HH:MM)");
+                        completeDate = Console.ReadLine();
+                    }
+                }
+            }
+            return null;
+        }
+
+
+        public static List<Models.Topic> CreateMTopicList()
+        {
+            List<Models.Topic> listOfTopics = new List<Models.Topic>();
+            Console.WriteLine("Do you want to input a topic? (yes/no)");
+            string answerToStart = Console.ReadLine().ToLower();
+            while (answerToStart == "yes")
+            {
+                listOfTopics.Add(new Models.Topic());
+
+                CreateMTask();
+
+                Console.WriteLine("Do you want to input another topic (yes/no)");
+                answerToStart = Console.ReadLine();
+            }
+            return listOfTopics;
+        }
+
+        public static void CreateMTask()
+        {
+            Console.WriteLine("Do you want to add task to this topic? (yes/no)");
+            answerToStart = Console.ReadLine();
+            while (answerToStart == "yes")
+            {
+                //jatka täältä
+            }
+
+
+
+
+            Models.Task newTask = new Models.Task();
+            const bool tryAgain = true;
+
+            Console.WriteLine("Give Title to Task or press enter");
+            string answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Title = answer;
+
+            Console.WriteLine("Give description to Task or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Title = answer;
+
+            Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM) or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+            {
+                while (tryAgain)
+                {
+                    try
+                    {
+                        newTask.Deadline = Convert.ToDateTime(answer);
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        Console.WriteLine("Input seems to be incorrect format.\nGive deadline date in format (YYYY, MM, DD, HH:MM)");
+                        answer = Console.ReadLine();
+                    }
+                }
+            }
+
+            Console.WriteLine("Give priority to Task (Low/Medium/High) or press enter");
+            answer = Console.ReadLine();
+            while (answer != "Low" && answer != "Medium" && answer != "High" && !String.IsNullOrEmpty(answer))
+            {
+                Console.WriteLine("Input seems to be incorrect format.\nGive priority to Task as one of these: (Low/Medium/High), notice upper and lower cases");
+                answer = Console.ReadLine();
+            }
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Priority = answer;
+
+            Console.WriteLine("Write note to task or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+                newTask.Notes = answer;
+
+            Console.WriteLine("Is task complete (yes/no) or press enter");
+            answer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(answer))
+            {
+                if (answer == "yes")
+                    newTask.Done = true;
+                else if (answer == "no")
+                    newTask.Done = false;
+            }
+
+            using (LearningDiaryContext newConnection = new LearningDiaryContext())
+            {
+                newTask.TopicId = newConnection.Topics.TakeLast(1).Select(topic => topic.Id).Single();
+
+                newConnection.Tasks.Add(newTask);
+                newConnection.SaveChanges();
+            }
         }
     }
 }
