@@ -386,98 +386,105 @@ namespace LearningDiary
             return null;
         }
 
-
-        public static List<Models.Topic> CreateMTopicList()
+        public static void CreateMTopics()
         {
-            List<Models.Topic> listOfTopics = new List<Models.Topic>();
-            Console.WriteLine("Do you want to input a topic? (yes/no)");
-            string answerToStart = Console.ReadLine().ToLower();
-            while (answerToStart == "yes")
-            {
-                listOfTopics.Add(new Models.Topic());
-
-                CreateMTask();
-
-                Console.WriteLine("Do you want to input another topic (yes/no)");
-                answerToStart = Console.ReadLine();
-            }
-            return listOfTopics;
+                Models.Topic newTopic = new Models.Topic();
+                using (LearningDiaryContext newConnection = new LearningDiaryContext())
+                {
+                    newConnection.Topics.Add(newTopic);
+                    newConnection.SaveChanges();
+                }
         }
 
-        public static void CreateMTask()
+        public static DateTime? AddDeadline()
         {
-            Console.WriteLine("Do you want to add task to this topic? (yes/no)");
-            answerToStart = Console.ReadLine();
-            while (answerToStart == "yes")
-            {
-                //jatka täältä
-            }
-
-
-
-
-            Models.Task newTask = new Models.Task();
             const bool tryAgain = true;
-
-            Console.WriteLine("Give Title to Task or press enter");
-            string answer = Console.ReadLine();
-            if (!String.IsNullOrEmpty(answer))
-                newTask.Title = answer;
-
-            Console.WriteLine("Give description to Task or press enter");
-            answer = Console.ReadLine();
-            if (!String.IsNullOrEmpty(answer))
-                newTask.Title = answer;
-
-            Console.WriteLine("Give deadline to Task (YYYY, MM, DD, HH:MM) or press enter");
-            answer = Console.ReadLine();
-            if (!String.IsNullOrEmpty(answer))
+            Console.WriteLine("Give deadline (YYYY, MM, DD, HH:MM) or press enter");
+            string startAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(startAnswer))
             {
                 while (tryAgain)
                 {
                     try
                     {
-                        newTask.Deadline = Convert.ToDateTime(answer);
-                        break;
+                        if (!String.IsNullOrEmpty(startAnswer))
+                            return Convert.ToDateTime(startAnswer);
                     }
                     catch (Exception)
                     {
-                        Console.WriteLine("Input seems to be incorrect format.\nGive deadline date in format (YYYY, MM, DD, HH:MM)");
-                        answer = Console.ReadLine();
+                        Console.WriteLine("Input seems to be incorrect format.\nGive deadline in format (YYYY, MM, DD, HH:MM)");
+                        startAnswer = Console.ReadLine();
                     }
                 }
             }
+            return null;
+        }
 
-            Console.WriteLine("Give priority to Task (Low/Medium/High) or press enter");
-            answer = Console.ReadLine();
-            while (answer != "Low" && answer != "Medium" && answer != "High" && !String.IsNullOrEmpty(answer))
+        public static string AddPriority()
+        {
+            Console.WriteLine("Give priority (Low/Medium/High) or press enter");
+            string priorityAnswer = Console.ReadLine();
+            while (priorityAnswer != "Low" && priorityAnswer != "Medium" && priorityAnswer != "High" && !String.IsNullOrEmpty(priorityAnswer))
             {
-                Console.WriteLine("Input seems to be incorrect format.\nGive priority to Task as one of these: (Low/Medium/High), notice upper and lower cases");
-                answer = Console.ReadLine();
+                Console.WriteLine("Input was incorrect please try again:");
+                priorityAnswer = Console.ReadLine();
             }
-            if (!String.IsNullOrEmpty(answer))
-                newTask.Priority = answer;
+            if (!String.IsNullOrEmpty(priorityAnswer))
+                return priorityAnswer;
+            return null;
+        }
 
-            Console.WriteLine("Write note to task or press enter");
-            answer = Console.ReadLine();
-            if (!String.IsNullOrEmpty(answer))
-                newTask.Notes = answer;
-
-            Console.WriteLine("Is task complete (yes/no) or press enter");
-            answer = Console.ReadLine();
-            if (!String.IsNullOrEmpty(answer))
+        public static bool? AddDone()
+        {
+            Console.WriteLine("Is task done (yes/no) or press enter");
+            string progressAnswer = Console.ReadLine().ToLower();
+            if (!String.IsNullOrEmpty(progressAnswer))
             {
-                if (answer == "yes")
-                    newTask.Done = true;
-                else if (answer == "no")
-                    newTask.Done = false;
+                if (progressAnswer == "yes")
+                    return true;
+                if (progressAnswer == "no")
+                    return false;
             }
+            return null;
+        }
 
+        public static string AddNote()
+        {
+            Console.WriteLine("Type note:");
+            string noteAnswer = Console.ReadLine();
+            if (!String.IsNullOrEmpty(noteAnswer))
+                return noteAnswer;
+            return null;
+        }
+
+        public static void CreateMTasks()
+        {
+            Console.WriteLine("Add task to latest topic (1) or specify topic (2)");
+            string option = Console.ReadLine();
+            Models.Task newTask = new Models.Task();
+            if (option == "2")
+            {
+                //newTask.TopicId = // Tähän lisää
+            }
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                newTask.TopicId = newConnection.Topics.TakeLast(1).Select(topic => topic.Id).Single();
-
                 newConnection.Tasks.Add(newTask);
+                newConnection.SaveChanges();
+            }
+        }
+
+        public static void CreateNotes()
+        {
+            Console.WriteLine("Add Note to latest task (1) or specify task (2)");
+            string option = Console.ReadLine();
+            Models.Note newNote = new Models.Note();
+            if (option == "2")
+            {
+                //newNote.TaskId = // Tähän lisää
+            }
+            using (LearningDiaryContext newConnection = new LearningDiaryContext())
+            {
+                newConnection.Notes.Add(newNote);
                 newConnection.SaveChanges();
             }
         }

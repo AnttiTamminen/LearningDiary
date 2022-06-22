@@ -17,6 +17,7 @@ namespace LearningDiary.Models
         {
         }
 
+        public virtual DbSet<Note> Notes { get; set; }
         public virtual DbSet<Task> Tasks { get; set; }
         public virtual DbSet<Topic> Topics { get; set; }
 
@@ -33,6 +34,32 @@ namespace LearningDiary.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Latin1_General_CI_AS");
 
+            modelBuilder.Entity<Note>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.ToTable("Note");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedOnAdd()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Note1)
+                    .HasColumnType("ntext")
+                    .HasColumnName("Note");
+
+                entity.Property(e => e.Title)
+                    .IsRequired()
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Task)
+                    .WithMany()
+                    .HasForeignKey(d => d.TaskId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Note_Task");
+            });
+
             modelBuilder.Entity<Task>(entity =>
             {
                 entity.ToTable("Task");
@@ -42,8 +69,6 @@ namespace LearningDiary.Models
                 entity.Property(e => e.Description)
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.Property(e => e.Notes).HasColumnType("ntext");
 
                 entity.Property(e => e.Priority)
                     .HasMaxLength(6)

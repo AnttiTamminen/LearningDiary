@@ -8,45 +8,60 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
-            string url = @"C:\Visual Studio\Projects\LearningDiary\Diary.txt";
+            bool goOn = true;
 
-            Welcome();
-
-            Console.WriteLine("Do you want to input a topic? (yes/no)");
-            string answerToStart = Console.ReadLine().ToLower();
-            while (answerToStart == "yes")
+            while (goOn)
             {
-                Create.CreateMTopic();
+                Welcome();
+                string answer = Console.ReadLine();
 
-                Console.WriteLine("Do you want to add task to this topic? (yes/no)");
-                answerToStart = Console.ReadLine();
-                while (answerToStart == "yes")
+                if (answer == "1")
                 {
-                    Create.CreateMTask();
-
-                    Console.WriteLine("Do you want to input another task to this topic (yes/no)");
-                    answerToStart = Console.ReadLine();
+                    Create.CreateMTopics();
                 }
-
-                Console.WriteLine("Do you want to input another topic (yes/no)");
-                answerToStart = Console.ReadLine();
+                else if (answer == "2")
+                {
+                    Create.CreateMTasks();
+                }
+                else if (answer == "3")
+                {
+                    Create.CreateNotes();
+                }
+                else if (answer == "9")
+                {
+                    goOn = false;
+                }
             }
 
-            Console.WriteLine("Do you want to see list of all topics? (yes/no)");
-            answerToStart = Console.ReadLine().ToLower();
-            if (answerToStart == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
-            {
-                PrintToConsole.PrintTopics(url);
 
-                FindModifyRemove.FindModifyTopic(url);
+            //Console.WriteLine("Do you want to add task to this topic? (yes/no)");
+            //answerToStart = Console.ReadLine();
+            //while (answerToStart == "yes")
+            //{
+            //    Create.CreateMTask();
 
-                PrintToConsole.PrintTopics(url);
-            }
-            else if (answerToStart == "yes")
-            {
-                Console.Clear();
-                Console.WriteLine("No topics created yet. Restart program to give first topic entry!");
-            }
+            //    Console.WriteLine("Do you want to input another task to this topic (yes/no)");
+            //    answerToStart = Console.ReadLine();
+            //}
+
+            //Console.WriteLine("Do you want to input another topic (yes/no)");
+            //answerToStart = Console.ReadLine();
+
+            //Console.WriteLine("Do you want to see list of all topics? (yes/no)");
+            //answerToStart = Console.ReadLine().ToLower();
+            //if (answerToStart == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
+            //{
+            //    PrintToConsole.PrintTopics(url);
+
+            //    FindModifyRemove.FindModifyTopic(url);
+
+            //    PrintToConsole.PrintTopics(url);
+            //}
+            //else if (answerToStart == "yes")
+            //{
+            //    Console.Clear();
+            //    Console.WriteLine("No topics created yet. Restart program to give first topic entry!");
+            //}
         }
 
         public static void Welcome()

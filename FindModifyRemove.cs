@@ -219,7 +219,9 @@ namespace LearningDiary
                     }
                 }
 
-                newConnection.Topics.Where(topic => topic.Id == id).Single().TimeSpent = Create.AddTimeSpent(newConnection.Topics.Where(topic => topic.Id == id).Single());
+                newConnection.Topics.Where(topic => topic.Id == id).Single().TimeSpent = (decimal)((TimeSpan)(
+                    newConnection.Topics.Where(topic => topic.Id == id).Single().CompletionDate - newConnection.Topics
+                        .Where(topic => topic.Id == id).Single().StartLearningDate)).TotalHours;
             }
         }
 
