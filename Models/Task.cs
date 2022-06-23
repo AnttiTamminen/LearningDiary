@@ -8,9 +8,9 @@ namespace LearningDiary.Models
 {
     public partial class Task
     {
-        public Task()
+        public Task(string title)
         {
-            Title = Create.AddTitle();
+            Title = title;
             Description = Create.AddDescription();
             Deadline = Create.AddDeadline();
             Priority = Create.AddPriority();
@@ -18,6 +18,7 @@ namespace LearningDiary.Models
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
                 TopicId = newConnection.Topics.TakeLast(1).Select(topic => topic.Id).Single();
         }
+        public Task(){}
 
         public int Id { get; set; }
         public string Title { get; set; }

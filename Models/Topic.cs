@@ -7,10 +7,10 @@ namespace LearningDiary.Models
 {
     public partial class Topic
     {
-        public Topic()
+        public Topic(string title)
         {
             Tasks = new HashSet<Task>();
-            Title = Create.AddTitle();
+            Title = title;
             Description = Create.AddDescription();
             TimeToMaster = Create.AddTimeToMaster();
             Source = Create.AddSource();
@@ -21,6 +21,8 @@ namespace LearningDiary.Models
             if (CompletionDate != null && StartLearningDate != null)
                 TimeSpent = (decimal)((TimeSpan)(CompletionDate - StartLearningDate)).TotalHours;
         }
+
+        public Topic() {}
 
         public int Id { get; set; }
         public string Title { get; set; }

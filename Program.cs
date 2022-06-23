@@ -9,66 +9,61 @@ namespace LearningDiary
         static void Main(string[] args)
         {
             bool goOn = true;
-
             while (goOn)
             {
-                Welcome();
-                string answer = Console.ReadLine();
+                Console.Clear();
+                Options();
+                char answer = Console.ReadKey().KeyChar;
+                int control;
+                do
+                {
+                    switch (answer)
+                    {
+                        case '1':
+                            Console.Clear();
+                            Create.CreateMTopics();
+                            control = 0;
+                            break;
 
-                if (answer == "1")
-                {
-                    Create.CreateMTopics();
-                }
-                else if (answer == "2")
-                {
-                    Create.CreateMTasks();
-                }
-                else if (answer == "3")
-                {
-                    Create.CreateNotes();
-                }
-                else if (answer == "9")
-                {
-                    goOn = false;
-                }
+                        case '2':
+                            Console.Clear();
+                            Create.CreateMTasks();
+                            control = 0;
+                            break;
+
+                        case '3':
+                            Console.Clear();
+                            Create.CreateNotes();
+                            control = 0;
+                            break;
+
+                        case '4':
+                            PrintToConsole.PrintTopics();
+                            control = 0;
+                            break;
+
+                        case '0':
+                            Console.Clear();
+                            goOn = false;
+                            control = 0;
+                            break;
+
+                        default:
+                            Console.WriteLine("\nInvalid key. Please try again\n");
+                            answer = Console.ReadKey().KeyChar;
+                            control = 1;
+                            break;
+                    }
+                } while (control == 1);
             }
-
-
-            //Console.WriteLine("Do you want to add task to this topic? (yes/no)");
-            //answerToStart = Console.ReadLine();
-            //while (answerToStart == "yes")
-            //{
-            //    Create.CreateMTask();
-
-            //    Console.WriteLine("Do you want to input another task to this topic (yes/no)");
-            //    answerToStart = Console.ReadLine();
-            //}
-
-            //Console.WriteLine("Do you want to input another topic (yes/no)");
-            //answerToStart = Console.ReadLine();
-
-            //Console.WriteLine("Do you want to see list of all topics? (yes/no)");
-            //answerToStart = Console.ReadLine().ToLower();
-            //if (answerToStart == "yes" && File.Exists(url) && new FileInfo(url).Length != 0)
-            //{
-            //    PrintToConsole.PrintTopics(url);
-
-            //    FindModifyRemove.FindModifyTopic(url);
-
-            //    PrintToConsole.PrintTopics(url);
-            //}
-            //else if (answerToStart == "yes")
-            //{
-            //    Console.Clear();
-            //    Console.WriteLine("No topics created yet. Restart program to give first topic entry!");
-            //}
         }
 
-        public static void Welcome()
+        public static void Options()
         {
-            Console.WriteLine("*********************************************************************\n\nWelcome to Learning diary console app!" +
-                              "\n\nAnswer questions as stated.\nYou can always just press enter to skip question or answer no." +
-                              "\n\n*********************************************************************\n");
+            Console.WriteLine("*********************************************************************\n\n" +
+            "LEARNING DIARY 5000".PadLeft(40) +
+            "\n\n*********************************************************************\n");
+            Console.WriteLine("Press:\n1) To input a topic\n2) To input a task\n3) To input a note\n4) To print Topics\n0) To exit\n");
         }
     }
 }
