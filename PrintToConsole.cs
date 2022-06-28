@@ -24,16 +24,16 @@ namespace LearningDiary
                     Console.WriteLine($"Completion date: {topic.CompletionDate}");
                     Console.WriteLine($"Time spent: {topic.TimeSpent}");
                     Console.WriteLine("Tasks:");
-                    //if (topic.Tasks.Count != 0)
-                    //{
-                    //    foreach (var task in topic.Tasks.Contain)
-                    //    {
-                    //        Console.WriteLine($"Task id:");
-                    //        Console.WriteLine("******************************************************************\n");
-                    //    }
-                    //}
-                    //else
-                    //    Console.Write("No tasks");
+                    if (topic.Tasks.Count != 0)
+                    {
+                        foreach (var task in topic.T)
+                        {
+                            Console.WriteLine($"Task id:");
+                            Console.WriteLine("******************************************************************\n");
+                        }
+                    }
+                    else
+                        Console.Write("No tasks");
 
 
                     Console.WriteLine("\n------------------------------------------------------------------\n");

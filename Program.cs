@@ -32,6 +32,7 @@ namespace LearningDiary
                         break;
 
                     case '4':
+                        Console.Clear();
                         PrintToConsole.PrintAllTopics();
                         break;
 
