@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using Utility;
 
 namespace LearningDiary
 {
@@ -8,62 +11,43 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
-            bool goOn = true;
-            while (goOn)
+            while (true)
             {
-                Console.Clear();
                 Options();
-                char answer = Console.ReadKey().KeyChar;
-                int control;
-                do
+                switch (Console.ReadKey().KeyChar)
                 {
-                    switch (answer)
-                    {
-                        case '1':
-                            Console.Clear();
-                            Create.CreateMTopics();
-                            control = 0;
-                            break;
+                    case '1':
+                        Console.Clear();
+                        Create.CreateMTopics();
+                        break;
 
-                        case '2':
-                            Console.Clear();
-                            Create.CreateMTasks();
-                            control = 0;
-                            break;
+                    case '2':
+                        Console.Clear();
+                        Create.CreateMTasks();
+                        break;
 
-                        case '3':
-                            Console.Clear();
-                            Create.CreateNotes();
-                            control = 0;
-                            break;
+                    case '3':
+                        Console.Clear();
+                        Create.CreateNotes();
+                        break;
 
-                        case '4':
-                            PrintToConsole.PrintTopics();
-                            control = 0;
-                            break;
+                    case '4':
+                        PrintToConsole.PrintAllTopics();
+                        break;
 
-                        case '0':
-                            Console.Clear();
-                            goOn = false;
-                            control = 0;
-                            break;
-
-                        default:
-                            Console.WriteLine("\nInvalid key. Please try again\n");
-                            answer = Console.ReadKey().KeyChar;
-                            control = 1;
-                            break;
-                    }
-                } while (control == 1);
+                    case '0':
+                        Environment.Exit(0);
+                        break;
+                }
             }
         }
-
-        public static void Options()
+        private static void Options()
         {
+            Console.Clear();
             Console.WriteLine("*********************************************************************\n\n" +
             "LEARNING DIARY 5000".PadLeft(40) +
             "\n\n*********************************************************************\n");
-            Console.WriteLine("Press:\n1) To input a topic\n2) To input a task\n3) To input a note\n4) To print Topics\n0) To exit\n");
+            Console.WriteLine("Press:\n1) To input a topic\n2) To input a task\n3) To input a note\n4) To see all Topics\n0) To exit\n");
         }
     }
 }

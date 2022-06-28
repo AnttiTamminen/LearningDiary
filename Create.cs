@@ -132,6 +132,8 @@ namespace LearningDiary
                 newConnection.Topics.Add(newTopic);
                 newConnection.SaveChanges();
             }
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadLine();
         }
 
         public static DateTime? AddDeadline()
@@ -199,17 +201,19 @@ namespace LearningDiary
         {
             Console.WriteLine("Add task to latest topic (1) or specify topic (2)");
             string option = Console.ReadLine();
-            string title = AddTitle();
-            Task newTask = new Task(title);
             if (option == "2")
             {
-                //newTask.TopicId = // Tähän lisää
+
             }
+            string title = AddTitle();
+            Task newTask = new Task(title);
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
                 newConnection.Tasks.Add(newTask);
                 newConnection.SaveChanges();
             }
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadLine();
         }
 
         public static void CreateNotes()
@@ -226,6 +230,8 @@ namespace LearningDiary
                 newConnection.Notes.Add(newNote);
                 newConnection.SaveChanges();
             }
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadLine();
         }
     }
 }

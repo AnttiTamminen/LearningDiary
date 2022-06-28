@@ -71,6 +71,9 @@ namespace LearningDiary
             }
         }
 
+
+
+
         public static void RemoveMTopic(int id)
         {
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
@@ -79,6 +82,8 @@ namespace LearningDiary
 
                 newConnection.SaveChanges();
             }
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadLine();
         }
 
         public static void RemoveMTask(int id)
@@ -89,6 +94,8 @@ namespace LearningDiary
 
                 newConnection.SaveChanges();
             }
+            Console.WriteLine("\nPress any key to continue");
+            Console.ReadLine();
         }
 
         public static bool FindMTopicWId(int id)
