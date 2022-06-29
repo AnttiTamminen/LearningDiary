@@ -35,6 +35,10 @@ namespace LearningDiary
                         PrintToConsole.PrintAllTopics();
                         break;
 
+                    //case '5':
+                    //    FindModifyRemove.Search();
+                    //    break;
+
                     case '0':
                         Environment.Exit(0);
                         break;
