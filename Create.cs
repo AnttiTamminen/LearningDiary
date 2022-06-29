@@ -123,19 +123,6 @@ namespace LearningDiary
             return null;
         }
 
-        public static void CreateMTopics()
-        {
-            string title = AddTitle();
-            Topic newTopic = new Topic(title);
-            using (LearningDiaryContext newConnection = new LearningDiaryContext())
-            {
-                newConnection.Topics.Add(newTopic);
-                newConnection.SaveChanges();
-            }
-            Console.WriteLine("\nPress any key to continue");
-            Console.ReadLine();
-        }
-
         public static DateTime? AddDeadline()
         {
             const bool tryAgain = true;
@@ -197,30 +184,56 @@ namespace LearningDiary
             return null;
         }
 
-        public static void CreateMTasks()
+        public static void CreateTopics()
         {
-            Console.WriteLine("Add task to latest topic (1) or specify topic (2)");
-            string option = Console.ReadLine();
-            if (option == "2")
-            {
-
-            }
             string title = AddTitle();
-            Task newTask = new Task(title);
+            Topic newTopic = new Topic(title);
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
+                newConnection.Topics.Add(newTopic);
+                newConnection.SaveChanges();
+            }
+
+            Console.WriteLine("Give task to topic yes/no?");
+            string answer = Console.ReadLine().ToLower();
+            while (answer == "yes")
+            {
+                CreateTasks("1");
+                Console.WriteLine("Give another task to topic yes/no?");
+                answer = Console.ReadLine().ToLower();
+            }
+        }
+
+        public static void CreateTasks(string option)
+        {
+            using (LearningDiaryContext newConnection = new LearningDiaryContext())
+            {
+                if (option == "2")
+                {
+                    Console.WriteLine("Give Topic id to select topic where task is added:");
+                    while (true)
+                    {
+                        if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Topics.Select(topic => topic.Id).Contains(result))
+                        {
+                            int newTopicId = result;
+                            break;
+                        }
+                        Console.WriteLine(
+                            "Input was incorrect or Id not found, try again\nGive Topic id to select topic where task is added:");
+                    }
+                }
+                string title = AddTitle();
+                Task newTask = new Task(title);
+
                 newConnection.Tasks.Add(newTask);
                 newConnection.SaveChanges();
             }
-            Console.WriteLine("\nPress any key to continue");
-            Console.ReadLine();
+
         }
 
-        public static void CreateNotes()
+        public static void CreateNotes(string option)
         {
-            Console.WriteLine("Add Note to latest task (1) or specify task (2)");
-            string option = Console.ReadLine();
-            Models.Note newNote = new Models.Note();
+            Note newNote = new Note();
             if (option == "2")
             {
                 //newNote.TaskId = // Tähän lisää
@@ -230,8 +243,6 @@ namespace LearningDiary
                 newConnection.Notes.Add(newNote);
                 newConnection.SaveChanges();
             }
-            Console.WriteLine("\nPress any key to continue");
-            Console.ReadLine();
         }
     }
 }

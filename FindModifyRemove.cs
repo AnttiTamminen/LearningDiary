@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LearningDiary.Models;
+using Utility;
 
 namespace LearningDiary
 {
@@ -71,9 +72,6 @@ namespace LearningDiary
             }
         }
 
-
-
-
         public static void RemoveMTopic(int id)
         {
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
@@ -98,26 +96,11 @@ namespace LearningDiary
             Console.ReadLine();
         }
 
-        public static bool FindMTopicWId(int id)
+        public static void FindTopics()
         {
-            bool foundTopic = false;
-            using (LearningDiaryContext newConnection = new LearningDiaryContext())
-            {
-                if (newConnection.Topics.Select(topic => topic.Id).Contains(id))
-                    foundTopic = true;
-            }
-            return foundTopic;
-        }
-
-        public static bool FindMTopicWTitle(string title)
-        {
-            bool foundTopic = false;
-            using (LearningDiaryContext newConnection = new LearningDiaryContext())
-            {
-                if (newConnection.Topics.Select(topic => topic.Title).Contains(title))
-                    foundTopic = true;
-            }
-            return foundTopic;
+            Console.Clear();
+            Console.WriteLine("Give Topic Id or Title:");
+            PrintToConsole.PrintAllTopics(Query.Search(Console.ReadLine(), ImportToVariable.DatabaseToTopiclist()));
         }
 
         public static bool FindMTaskWId(int id)
