@@ -16,7 +16,7 @@ namespace LearningDiary.Models
             Priority = Create.AddPriority();
             Done = Create.AddDone();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
-                TopicId = newConnection.Topics.TakeLast(1).Select(topic => topic.Id).Single();
+                TopicId = newConnection.Topics.Max(topic => topic.Id);
         }
         public Task(){}
 
