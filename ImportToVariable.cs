@@ -19,16 +19,26 @@ namespace LearningDiary
             return topicList;
         }
 
-        public static List<Models.Task> DatabaseToTask(Models.Topic topic)
+        public static List<Task> DatabaseToTasklist()
         {
-            List<Models.Task> taskList = new List<Models.Task>();
+            List<Task> taskList = new List<Task>();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                var tasksOfTopic = newConnection.Tasks.Where(task => task.TopicId == newConnection.Topics.ElementAt(topic.Id).Id).ToList();
-                if (tasksOfTopic.Any())
-                    taskList = tasksOfTopic;
+                if (newConnection.Tasks.Any())
+                    taskList = newConnection.Tasks.ToList();
             }
             return taskList;
+        }
+
+        public static List<Note> DatabaseToNotelist()
+        {
+            List<Note> noteList = new List<Note>();
+            using (LearningDiaryContext newConnection = new LearningDiaryContext())
+            {
+                if (newConnection.Notes.Any())
+                    noteList = newConnection.Notes.ToList();
+            }
+            return noteList;
         }
     }
 }

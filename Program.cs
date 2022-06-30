@@ -44,6 +44,14 @@ namespace LearningDiary
                         FindModifyRemove.FindTopics();
                         break;
 
+                    case '6':
+                        FindModifyRemove.FindTasks();
+                        break;
+
+                    case '7':
+                        FindModifyRemove.FindNotes();
+                        break;
+
                     case '0':
                         Console.Clear();
                         Environment.Exit(0);
@@ -57,7 +65,7 @@ namespace LearningDiary
             Console.WriteLine("*********************************************************************\n\n" +
             "LEARNING DIARY 5000".PadLeft(40) +
             "\n\n*********************************************************************\n");
-            Console.WriteLine("Press:\n1) To input a topic\n2) To input a task\n3) To input a note\n4) To see all Topics\n5) Search Topics\n0) To exit\n");
+            Console.WriteLine("Press:\n1) To input a topic\n2) To input a task\n3) To input a note\n4) To see all Topics\n5) Search Topics\n6) Search Tasks\n7) Search Notes\n0) To exit\n");
         }
     }
 }

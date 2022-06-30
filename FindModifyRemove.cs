@@ -103,26 +103,18 @@ namespace LearningDiary
             PrintToConsole.PrintTopics(Query.Search(Console.ReadLine(), ImportToVariable.DatabaseToTopiclist()));
         }
 
-        public static bool FindMTaskWId(int id)
+        public static void FindTasks()
         {
-            bool foundTask = false;
-            using (LearningDiaryContext newConnection = new LearningDiaryContext())
-            {
-                if (newConnection.Tasks.Select(task => task.Id).Contains(id))
-                    foundTask = true;
-            }
-            return foundTask;
+            Console.Clear();
+            Console.WriteLine("Give Task Id or Title:");
+            PrintToConsole.PrintTasks(Query.Search(Console.ReadLine(), ImportToVariable.DatabaseToTasklist()));
         }
 
-        public static bool FindMTaskWTitle(string title)
+        public static void FindNotes()
         {
-            bool foundTask = false;
-            using (LearningDiaryContext newConnection = new LearningDiaryContext())
-            {
-                if (newConnection.Tasks.Select(task => task.Title).Contains(title))
-                    foundTask = true;
-            }
-            return foundTask;
+            Console.Clear();
+            Console.WriteLine("Give Note Id or Title:");
+            PrintToConsole.PrintNotes(Query.Search(Console.ReadLine(), ImportToVariable.DatabaseToNotelist()));
         }
     }
 }

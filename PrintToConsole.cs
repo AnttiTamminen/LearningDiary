@@ -28,7 +28,7 @@ namespace LearningDiary
                         Console.WriteLine($"Time spent: {topic.TimeSpent}");
                         Console.WriteLine("Tasks:");
 
-                        PrintTasks(topic);
+                        PrintTasks(topic.Id);
 
                         Console.WriteLine("\n------------------------------------------------------------------\n");
                     }
@@ -59,7 +59,7 @@ namespace LearningDiary
                         Console.WriteLine($"Time spent: {topic.TimeSpent}");
                         Console.WriteLine("Tasks:");
 
-                        PrintTasks(topic);
+                        PrintTasks(topic.Id);
 
                         Console.WriteLine("\n------------------------------------------------------------------\n");
                     }
@@ -71,16 +71,17 @@ namespace LearningDiary
             Console.ReadLine();
         }
 
-        public static void PrintTasks(Topic topic)
+        public static void PrintTasks(int topiId)
         {
             using (LearningDiaryContext newConnection2 = new LearningDiaryContext())
             {
-                var list1 = newConnection2.Topics.ToList().Join(newConnection2.Tasks.ToList(), topici => topici,
-                    taski => taski.Topic, (topici, taski) => new {Taski = taski, ToId = topici.Id});
+                // query gets all tasks that are in topic which id is given to method
+                IEnumerable<Task> taskSelection = newConnection2.Topics.ToList().Join(newConnection2.Tasks.ToList(), topic => topic,
+                    taski => taski.Topic, (topic, taski) => new {Taski = taski, ToId = topic.Id}).Where(x => x.ToId == topiId).Select(t => t.Taski); 
 
-                if (list1.Select(x => x.Taski).Where(y => y.TopicId == topic.Id).Any())
+                if (taskSelection.Any())
                 {
-                    foreach (var task in list1.Select(x => x.Taski).Where(y => y.TopicId == topic.Id))
+                    foreach (var task in taskSelection)
                     {
                         Console.WriteLine("\n******************************************************************\n");
                         Console.WriteLine($"Task id: {task.Id}");
@@ -91,7 +92,7 @@ namespace LearningDiary
                         Console.WriteLine($"Task is done: {task.Done}");
                         Console.WriteLine("Notes:");
 
-                        PrintNotes(task);
+                        PrintNotes(task.Id);
                     }
                     Console.WriteLine("");
                 }
@@ -100,16 +101,43 @@ namespace LearningDiary
             }
         }
 
-        public static void PrintNotes(Task task)
+        public static void PrintTasks(List<Task> taskList)
+        {
+            Console.Clear();
+                if (taskList.Any())
+                {
+                    foreach (var task in taskList)
+                    {
+                        Console.WriteLine("\n******************************************************************\n");
+                        Console.WriteLine($"Task id: {task.Id}");
+                        Console.WriteLine($"Task title: {task.Title}");
+                        Console.WriteLine($"Task description: {task.Description}");
+                        Console.WriteLine($"Task deadline: {task.Deadline}");
+                        Console.WriteLine($"Task Priority: {task.Priority}");
+                        Console.WriteLine($"Task is done: {task.Done}");
+                        Console.WriteLine("Notes:");
+
+                        PrintNotes(task.Id);
+                    }
+                    Console.WriteLine("");
+                }
+                else
+                    Console.WriteLine("No task found.");
+
+                Console.WriteLine("\nPress any key to continue");
+                Console.ReadLine();
+        }
+
+        public static void PrintNotes(int tasId)
         {
             using (LearningDiaryContext newConnection3 = new LearningDiaryContext())
             {
-                var list2 = newConnection3.Tasks.ToList().Join(newConnection3.Notes.ToList(), tski => tski,
-                    notei => notei.Task, (tski, notei) => new { Notet = notei, TaId = tski.Id });
+                IEnumerable<Note> noteSelection = newConnection3.Tasks.ToList().Join(newConnection3.Notes.ToList(), task => task,
+                    notei => notei.Task, (task, notei) => new { Notet = notei, TaId = task.Id }).Where(x => x.TaId == tasId).Select(t => t.Notet);
 
-                if (list2.Select(x => x.Notet).Where(y => y.TaskId == task.Id).Any())
+                if (noteSelection.Any())
                 {
-                    foreach (var note in list2.Select(x => x.Notet).Where(y => y.TaskId == task.Id))
+                    foreach (var note in noteSelection)
                     {
                         Console.WriteLine(
                             "\n................................................................\n");
@@ -122,5 +150,24 @@ namespace LearningDiary
             }
         }
 
+        public static void PrintNotes(List<Note> noteList)
+        {
+            Console.Clear();
+                if (noteList.Any())
+                {
+                    foreach (var note in noteList)
+                    {
+                        Console.WriteLine(
+                            "\n................................................................\n");
+                        Console.WriteLine($"Note title: {note.Title}");
+                        Console.WriteLine($"Note text: {note.Note1}");
+                    }
+                }
+                else
+                    Console.WriteLine("No note found.");
+
+                Console.WriteLine("\nPress any key to continue");
+                Console.ReadLine();
+        }
     }
 }
