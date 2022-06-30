@@ -100,7 +100,7 @@ namespace LearningDiary
         {
             Console.Clear();
             Console.WriteLine("Give Topic Id or Title:");
-            PrintToConsole.PrintAllTopics(Query.Search(Console.ReadLine(), ImportToVariable.DatabaseToTopiclist()));
+            PrintToConsole.PrintTopics(Query.Search(Console.ReadLine(), ImportToVariable.DatabaseToTopiclist()));
         }
 
         public static bool FindMTaskWId(int id)
