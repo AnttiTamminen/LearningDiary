@@ -1,22 +1,22 @@
-﻿
-
-#nullable disable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+#nullable disable
 
 namespace LearningDiary.Models
 {
     public partial class Note
     {
-        public Note()
+        public Note(string title)
         {
-            Title = Create.AddTitle();
+            Title = title;
             Note1 = Create.AddNote();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
                 TaskId = newConnection.Tasks.Max(task => task.Id);
         }
+
+        public Note(){}
 
         public int Id { get; set; }
         public string Title { get; set; }

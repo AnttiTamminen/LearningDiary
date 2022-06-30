@@ -21,8 +21,10 @@ namespace LearningDiary.Models
             if (CompletionDate != null && StartLearningDate != null)
                 TimeSpent = (decimal)((TimeSpan)(CompletionDate - StartLearningDate)).TotalHours;
         }
-
-        public Topic() {}
+        public Topic()
+        {
+            Tasks = new HashSet<Task>();
+        }
 
         public int Id { get; set; }
         public string Title { get; set; }

@@ -78,7 +78,7 @@ namespace LearningDiary
                 var list1 = newConnection2.Topics.ToList().Join(newConnection2.Tasks.ToList(), topici => topici,
                     taski => taski.Topic, (topici, taski) => new {Taski = taski, ToId = topici.Id});
 
-                if (list1.Any())
+                if (list1.Select(x => x.Taski).Where(y => y.TopicId == topic.Id).Any())
                 {
                     foreach (var task in list1.Select(x => x.Taski).Where(y => y.TopicId == topic.Id))
                     {
@@ -105,9 +105,9 @@ namespace LearningDiary
             using (LearningDiaryContext newConnection3 = new LearningDiaryContext())
             {
                 var list2 = newConnection3.Tasks.ToList().Join(newConnection3.Notes.ToList(), tski => tski,
-                    note => note.Task, (tski, note) => new { Notet = note, TaId = tski.Id });
+                    notei => notei.Task, (tski, notei) => new { Notet = notei, TaId = tski.Id });
 
-                if (list2.Any())
+                if (list2.Select(x => x.Notet).Where(y => y.TaskId == task.Id).Any())
                 {
                     foreach (var note in list2.Select(x => x.Notet).Where(y => y.TaskId == task.Id))
                     {

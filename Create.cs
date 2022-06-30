@@ -265,13 +265,15 @@ namespace LearningDiary
                         Console.WriteLine(
                             "Input was incorrect or Id not found, try again\nGive Task id to select task where note is added:");
                     }
-                    Note newNote = new Note();
+                    string title = AddTitle();
+                    Note newNote = new Note(title);
                     newNote.TaskId = newTaskId;
                     newConnection.Notes.Add(newNote);
                 }
                 else
                 {
-                    Note newNote = new Note();
+                    string title = AddTitle();
+                    Note newNote = new Note(title);
                     newConnection.Notes.Add(newNote);
                 }
                 newConnection.SaveChanges();

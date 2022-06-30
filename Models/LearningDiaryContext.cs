@@ -36,13 +36,9 @@ namespace LearningDiary.Models
 
             modelBuilder.Entity<Note>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.ToTable("Note");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedOnAdd()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Note1)
                     .HasColumnType("ntext")
@@ -54,7 +50,7 @@ namespace LearningDiary.Models
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Task)
-                    .WithMany()
+                    .WithMany(p => p.Notes)
                     .HasForeignKey(d => d.TaskId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Note_Task");
