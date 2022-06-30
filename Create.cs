@@ -210,22 +210,38 @@ namespace LearningDiary
             {
                 if (option == "2")
                 {
+                    int newTopicId;
                     Console.WriteLine("Give Topic id to select topic where task is added:");
                     while (true)
                     {
                         if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Topics.Select(topic => topic.Id).Contains(result))
                         {
-                            int newTopicId = result;
+                            newTopicId = result;
                             break;
                         }
                         Console.WriteLine(
                             "Input was incorrect or Id not found, try again\nGive Topic id to select topic where task is added:");
                     }
+                    string title = AddTitle();
+                    Task newTask = new Task(title);
+                    newTask.TopicId = newTopicId;
+                    newConnection.Tasks.Add(newTask);
                 }
-                string title = AddTitle();
-                Task newTask = new Task(title);
+                else
+                {
+                    string title = AddTitle();
+                    Task newTask = new Task(title);
+                    newConnection.Tasks.Add(newTask);
 
-                newConnection.Tasks.Add(newTask);
+                    Console.WriteLine("Give note to task yes/no?");
+                    string answer = Console.ReadLine().ToLower();
+                    while (answer == "yes")
+                    {
+                        CreateNotes("1");
+                        Console.WriteLine("Give another note to task yes/no?");
+                        answer = Console.ReadLine().ToLower();
+                    }
+                }
                 newConnection.SaveChanges();
             }
 
@@ -233,14 +249,31 @@ namespace LearningDiary
 
         public static void CreateNotes(string option)
         {
-            Note newNote = new Note();
-            if (option == "2")
-            {
-                //newNote.TaskId = // Tähän lisää
-            }
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                newConnection.Notes.Add(newNote);
+                if (option == "2")
+                {
+                    int newTaskId;
+                    Console.WriteLine("Give Task id to select task where note is added:");
+                    while (true)
+                    {
+                        if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Tasks.Select(task => task.Id).Contains(result))
+                        {
+                            newTaskId = result;
+                            break;
+                        }
+                        Console.WriteLine(
+                            "Input was incorrect or Id not found, try again\nGive Task id to select task where note is added:");
+                    }
+                    Note newNote = new Note();
+                    newNote.TaskId = newTaskId;
+                    newConnection.Notes.Add(newNote);
+                }
+                else
+                {
+                    Note newNote = new Note();
+                    newConnection.Notes.Add(newNote);
+                }
                 newConnection.SaveChanges();
             }
         }

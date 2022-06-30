@@ -15,7 +15,7 @@ namespace LearningDiary.Models
             Title = Create.AddTitle();
             Note1 = Create.AddNote();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
-                TaskId = newConnection.Tasks.TakeLast(1).Select(task => task.Id).Single();
+                TaskId = newConnection.Tasks.Max(task => task.Id);
         }
 
         public int Id { get; set; }
