@@ -11,6 +11,9 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
+
+            // muuta enumit intiksi tietokannassa
+
             while (true)
             {
                 Options();
@@ -18,26 +21,26 @@ namespace LearningDiary
                 {
                     case '1':
                         Console.Clear();
-                        Create.CreateTopics();
+                        PrintToConsole.PrintTopics();
                         break;
 
                     case '2':
+                        Console.Clear();
+                        Create.CreateTopics();
+                        break;
+
+                    case '3':
                         Console.Clear();
                         Console.WriteLine("Add task to latest topic (1) or specify topic (2)");
                         string optionTask = Console.ReadLine();
                         Create.CreateTasks(optionTask);
                         break;
 
-                    case '3':
+                    case '4':
                         Console.Clear();
                         Console.WriteLine("Add Note to latest task (1) or specify task (2)");
                         string optionNote = Console.ReadLine();
                         Create.CreateNotes(optionNote);
-                        break;
-
-                    case '4':
-                        Console.Clear();
-                        PrintToConsole.PrintTopics();
                         break;
 
                     case '5':
@@ -50,6 +53,21 @@ namespace LearningDiary
 
                     case '7':
                         FindModifyRemove.FindNotes();
+                        break;
+
+                    case '8':
+                        //FindModifyRemove.LatestEdit();
+
+                        // need to add LastUpdatedBy DateTime field to database tables which is given current time as value when created/modified
+                        // then that time can be compared to current time to find latest database entry
+
+                        break;
+
+                    case '9':
+                        Console.Clear();
+                        Console.WriteLine("Are you sure you want to delete all data?");
+                        if (Console.ReadLine().ToLower() == "yes")
+                            FindModifyRemove.RemoveTopic(ImportToVariable.DatabaseToTopiclist());
                         break;
 
                     case '0':
@@ -65,7 +83,7 @@ namespace LearningDiary
             Console.WriteLine("*********************************************************************\n\n" +
             "LEARNING DIARY 5000".PadLeft(40) +
             "\n\n*********************************************************************\n");
-            Console.WriteLine("Press:\n1) To input a topic\n2) To input a task\n3) To input a note\n4) To see all Topics\n5) Search Topics\n6) Search Tasks\n7) Search Notes\n0) To exit\n");
+            Console.WriteLine("Press:\n\n1) See whole diary\n2) Input a topic\n3) Input a task\n4) Input a note\n5) Search/modify/remove Topics\n6) Search/modify/remove Tasks\n7) Search/modify/remove Notes\n8) Show last edited item\n9) Clear all data\n0) To exit\n");
         }
     }
 }

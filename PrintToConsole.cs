@@ -19,7 +19,7 @@ namespace LearningDiary
                     {
                         Console.WriteLine($"Id: {topic.Id}");
                         Console.WriteLine($"Title: {topic.Title}");
-                        Console.WriteLine($"Description: {topic.Id}");
+                        Console.WriteLine($"Description: {topic.Description}");
                         Console.WriteLine($"Estimated time to master: {topic.TimeToMaster}");
                         Console.WriteLine($"Source: {topic.Source}");
                         Console.WriteLine($"Start learning date: {topic.StartLearningDate}");
@@ -50,7 +50,7 @@ namespace LearningDiary
                     {
                         Console.WriteLine($"Id: {topic.Id}");
                         Console.WriteLine($"Title: {topic.Title}");
-                        Console.WriteLine($"Description: {topic.Id}");
+                        Console.WriteLine($"Description: {topic.Description}");
                         Console.WriteLine($"Estimated time to master: {topic.TimeToMaster}");
                         Console.WriteLine($"Source: {topic.Source}");
                         Console.WriteLine($"Start learning date: {topic.StartLearningDate}");
@@ -66,16 +66,14 @@ namespace LearningDiary
             }
             else
                 Console.WriteLine("Topic not found");
-           
-            Console.WriteLine("\nPress any key to continue");
-            Console.ReadLine();
         }
 
         public static void PrintTasks(int topiId)
         {
             using (LearningDiaryContext newConnection2 = new LearningDiaryContext())
             {
-                // query gets all tasks that are in topic which id is given to method
+                // query gets all tasks that are in topic which id is given to method. Join creates a object that has tasks and topic id fields
+                // from that list only tasks with specified topicId are selected
                 IEnumerable<Task> taskSelection = newConnection2.Topics.ToList().Join(newConnection2.Tasks.ToList(), topic => topic,
                     taski => taski.Topic, (topic, taski) => new {Taski = taski, ToId = topic.Id}).Where(x => x.ToId == topiId).Select(t => t.Taski); 
 
