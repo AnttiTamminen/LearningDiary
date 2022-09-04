@@ -14,11 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="DateChecker">
-      <HintPath>..\PairExcersice\bin\Debug\netcoreapp3.1\DateChecker.dll</HintPath>
-    </Reference>
-    <Reference Include="Utility">
-      <HintPath>..\PairExcersice\bin\Debug\netcoreapp3.1\Utility.dll</HintPath>
+    <Reference Include="SearchObject">
+      <HintPath>DLL\SearchObject.dll</HintPath>
     </Reference>
   </ItemGroup>
 

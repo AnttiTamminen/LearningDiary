@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LearningDiary.Models;
-using Utility;
+using SearchObject;
 
 namespace LearningDiary
 {
