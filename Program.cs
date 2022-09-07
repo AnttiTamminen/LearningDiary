@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Utility;
+using SearchObject;
+using LearningDiary.Models;
 
 namespace LearningDiary
 {
@@ -11,9 +12,6 @@ namespace LearningDiary
     {
         static void Main(string[] args)
         {
-
-            // muuta enumit intiksi tietokannassa
-
             while (true)
             {
                 Options();
@@ -56,14 +54,6 @@ namespace LearningDiary
                         break;
 
                     case '8':
-                        //FindModifyRemove.LatestEdit();
-
-                        // need to add LastUpdatedBy DateTime field to database tables which is given current time as value when created/modified
-                        // then that time can be compared to current time to find latest database entry
-
-                        break;
-
-                    case '9':
                         Console.Clear();
                         Console.WriteLine("Are you sure you want to delete all data?");
                         if (Console.ReadLine().ToLower() == "yes")
@@ -83,7 +73,7 @@ namespace LearningDiary
             Console.WriteLine("*********************************************************************\n\n" +
             "LEARNING DIARY 5000".PadLeft(40) +
             "\n\n*********************************************************************\n");
-            Console.WriteLine("Press:\n\n1) See whole diary\n2) Input a topic\n3) Input a task\n4) Input a note\n5) Search/modify/remove Topics\n6) Search/modify/remove Tasks\n7) Search/modify/remove Notes\n8) Show last edited item\n9) Clear all data\n0) To exit\n");
+            Console.WriteLine("Press:\n\n1) See whole diary\n2) Input a topic\n3) Input a task\n4) Input a note\n5) Search/modify/remove Topics\n6) Search/modify/remove Tasks\n7) Search/modify/remove Notes\n8) Clear all data\n0) To exit\n");
         }
     }
 }

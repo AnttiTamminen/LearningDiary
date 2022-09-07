@@ -13,7 +13,7 @@ namespace LearningDiary.Models
             Title = title;
             Note1 = Create.AddNote();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
-                TaskId = newConnection.Tasks.Max(task => task.Id);
+                TaskId = newConnection.Task.Max(task => task.Id);
         }
 
         public Note(){}

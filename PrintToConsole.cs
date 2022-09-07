@@ -13,9 +13,9 @@ namespace LearningDiary
             Console.Clear();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                if (newConnection.Topics.Any())
+                if (newConnection.Topic.Any())
                 {
-                    foreach (Topic topic in newConnection.Topics)
+                    foreach (Topic topic in newConnection.Topic)
                     {
                         Console.WriteLine($"Id: {topic.Id}");
                         Console.WriteLine($"Title: {topic.Title}");
@@ -74,7 +74,7 @@ namespace LearningDiary
             {
                 // query gets all tasks that are in topic which id is given to method. Join creates a object that has tasks and topic id fields
                 // from that list only tasks with specified topicId are selected
-                IEnumerable<Task> taskSelection = newConnection2.Topics.ToList().Join(newConnection2.Tasks.ToList(), topic => topic,
+                IEnumerable<Task> taskSelection = newConnection2.Topic.ToList().Join(newConnection2.Task.ToList(), topic => topic,
                     taski => taski.Topic, (topic, taski) => new {Taski = taski, ToId = topic.Id}).Where(x => x.ToId == topiId).Select(t => t.Taski); 
 
                 if (taskSelection.Any())
@@ -130,7 +130,7 @@ namespace LearningDiary
         {
             using (LearningDiaryContext newConnection3 = new LearningDiaryContext())
             {
-                IEnumerable<Note> noteSelection = newConnection3.Tasks.ToList().Join(newConnection3.Notes.ToList(), task => task,
+                IEnumerable<Note> noteSelection = newConnection3.Task.ToList().Join(newConnection3.Note.ToList(), task => task,
                     notei => notei.Task, (task, notei) => new { Notet = notei, TaId = task.Id }).Where(x => x.TaId == tasId).Select(t => t.Notet);
 
                 if (noteSelection.Any())

@@ -190,7 +190,7 @@ namespace LearningDiary
             Topic newTopic = new Topic(title);
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                newConnection.Topics.Add(newTopic);
+                newConnection.Topic.Add(newTopic);
                 newConnection.SaveChanges();
             }
 
@@ -214,7 +214,7 @@ namespace LearningDiary
                     Console.WriteLine("Give Topic id to select topic where task is added:");
                     while (true)
                     {
-                        if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Topics.Select(topic => topic.Id).Contains(result))
+                        if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Topic.Select(topic => topic.Id).Contains(result))
                         {
                             newTopicId = result;
                             break;
@@ -225,13 +225,13 @@ namespace LearningDiary
                     string title = AddTitle();
                     Task newTask = new Task(title);
                     newTask.TopicId = newTopicId;
-                    newConnection.Tasks.Add(newTask);
+                    newConnection.Task.Add(newTask);
                 }
                 else
                 {
                     string title = AddTitle();
                     Task newTask = new Task(title);
-                    newConnection.Tasks.Add(newTask);
+                    newConnection.Task.Add(newTask);
 
                     Console.WriteLine("Give note to task yes/no?");
                     string answer = Console.ReadLine().ToLower();
@@ -257,7 +257,7 @@ namespace LearningDiary
                     Console.WriteLine("Give Task id to select task where note is added:");
                     while (true)
                     {
-                        if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Tasks.Select(task => task.Id).Contains(result))
+                        if (int.TryParse(Console.ReadLine(), out var result) && newConnection.Task.Select(task => task.Id).Contains(result))
                         {
                             newTaskId = result;
                             break;
@@ -268,13 +268,13 @@ namespace LearningDiary
                     string title = AddTitle();
                     Note newNote = new Note(title);
                     newNote.TaskId = newTaskId;
-                    newConnection.Notes.Add(newNote);
+                    newConnection.Note.Add(newNote);
                 }
                 else
                 {
                     string title = AddTitle();
                     Note newNote = new Note(title);
-                    newConnection.Notes.Add(newNote);
+                    newConnection.Note.Add(newNote);
                 }
                 newConnection.SaveChanges();
             }

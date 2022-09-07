@@ -13,8 +13,8 @@ namespace LearningDiary
             List<Topic> topicList = new List<Topic>();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                if (newConnection.Topics.Any())
-                    topicList = newConnection.Topics.ToList();
+                if (newConnection.Topic.Any())
+                    topicList = newConnection.Topic.ToList();
             }
             return topicList;
         }
@@ -24,8 +24,8 @@ namespace LearningDiary
             List<Task> taskList = new List<Task>();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                if (newConnection.Tasks.Any())
-                    taskList = newConnection.Tasks.ToList();
+                if (newConnection.Task.Any())
+                    taskList = newConnection.Task.ToList();
             }
             return taskList;
         }
@@ -35,8 +35,8 @@ namespace LearningDiary
             List<Note> noteList = new List<Note>();
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                if (newConnection.Notes.Any())
-                    noteList = newConnection.Notes.ToList();
+                if (newConnection.Note.Any())
+                    noteList = newConnection.Note.ToList();
             }
             return noteList;
         }

@@ -141,7 +141,7 @@ namespace LearningDiary
 
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                Topic topic = newConnection.Topics.Where(topic => topic.Id == id).Single();
+                Topic topic = newConnection.Topic.Where(topic => topic.Id == id).Single();
                 switch (number)
                 {
                     case "1":
@@ -202,7 +202,7 @@ namespace LearningDiary
 
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                Task task = newConnection.Tasks.Where(task => task.Id == id).Single();
+                Task task = newConnection.Task.Where(task => task.Id == id).Single();
                 switch (number)
                 {
                     case "1":
@@ -242,7 +242,7 @@ namespace LearningDiary
 
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                Note note = newConnection.Notes.Where(note => note.Id == id).Single();
+                Note note = newConnection.Note.Where(note => note.Id == id).Single();
                 switch (number)
                 {
                     case "1":
@@ -261,10 +261,10 @@ namespace LearningDiary
         {
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                newConnection.Topics.Remove(newConnection.Topics.Where(topic => topic.Id == id).Single());
-                foreach (var task in newConnection.Tasks.Where(task => task.TopicId == id))
+                newConnection.Topic.Remove(newConnection.Topic.Where(topic => topic.Id == id).Single());
+                foreach (var task in newConnection.Task.Where(task => task.TopicId == id))
                 {
-                    newConnection.Tasks.Remove(task);
+                    newConnection.Task.Remove(task);
 
                     RemoveNote(task);
                 }
@@ -278,10 +278,10 @@ namespace LearningDiary
             {
                 foreach (var topic in topicList)
                 {
-                    newConnection.Topics.Remove(topic);
-                    foreach (var task in newConnection.Tasks.Where(task => task.TopicId == topic.Id))
+                    newConnection.Topic.Remove(topic);
+                    foreach (var task in newConnection.Task.Where(task => task.TopicId == topic.Id))
                     {
-                        newConnection.Tasks.Remove(task);
+                        newConnection.Task.Remove(task);
 
                         RemoveNote(task);
                     }
@@ -294,9 +294,9 @@ namespace LearningDiary
         {
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                newConnection.Tasks.Remove(newConnection.Tasks.Where(task => task.Id == id).Single());
+                newConnection.Task.Remove(newConnection.Task.Where(task => task.Id == id).Single());
                 
-                RemoveNote(newConnection.Tasks.Where(task => task.Id == id).Single());
+                RemoveNote(newConnection.Task.Where(task => task.Id == id).Single());
 
                 newConnection.SaveChanges();
             }
@@ -306,8 +306,8 @@ namespace LearningDiary
         {
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                foreach (var note in newConnection.Notes.Where(note => note.TaskId == task.Id))
-                    newConnection.Notes.Remove(note);
+                foreach (var note in newConnection.Note.Where(note => note.TaskId == task.Id))
+                    newConnection.Note.Remove(note);
 
                 newConnection.SaveChanges();
             }
@@ -318,7 +318,7 @@ namespace LearningDiary
         {
             using (LearningDiaryContext newConnection = new LearningDiaryContext())
             {
-                newConnection.Notes.Remove(newConnection.Notes.Where(note => note.Id == id).Single());
+                newConnection.Note.Remove(newConnection.Note.Where(note => note.Id == id).Single());
 
                 newConnection.SaveChanges();
             }
