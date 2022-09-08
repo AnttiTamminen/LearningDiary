@@ -1,0 +1,4 @@
+Id,Title,Description,TimeToMaster,TimeSpent,Source,StartLearningDate,InProgress,CompletionDate
+1,C#,basics of C#,50,10,Microsoft Lear,2022-09-04 16:32:00,True,2022-09-30 16:32:00
+2,Javascript,What is javascript,42,0,onlinecourse,2022-09-11 16:45:00,False,2022-09-18 16:46:00
+3,Testing,Just testing,5,,youtube,,,

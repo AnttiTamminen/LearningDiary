@@ -1,0 +1,5 @@
+Id,Title,Description,Deadline,Priority,Done,TopicId
+1,Data types,What are variables,2022-09-27 16:35:00,Medium,False,1
+2,Methods,What are methods,2022-09-19 16:35:00,High,True,1
+3,Method types,What types of methods exist,2022-10-27 16:46:00,Low,False,2
+4,DOM,The HTML DOM is an API (Programming Interface) for JavaScript,,Low,False,2
